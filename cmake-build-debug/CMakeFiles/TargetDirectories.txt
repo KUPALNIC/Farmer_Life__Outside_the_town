@@ -1,0 +1,3 @@
+/home/kupalnic/CLionProjects/Farmer Life: Outside the town/cmake-build-debug/CMakeFiles/Farmer_Life__Outside_the_town.dir
+/home/kupalnic/CLionProjects/Farmer Life: Outside the town/cmake-build-debug/CMakeFiles/edit_cache.dir
+/home/kupalnic/CLionProjects/Farmer Life: Outside the town/cmake-build-debug/CMakeFiles/rebuild_cache.dir
