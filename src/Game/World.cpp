@@ -2,9 +2,12 @@
 
 World::World() {
     // Инициализация мира
-    for (int y = 0; y < worldSize; ++y) {
-        for (int x = 0; x < worldSize; ++x) {
+    for (int y = 0; y < worldSize/2; ++y) {
+        for (int x = 0; x < worldSize/2; ++x) {
             worldGrid[y][x] = Biome::PLAINS;
+            worldGrid[y+worldSize/2][x] = Biome::FOREST;
+            worldGrid[y][x+worldSize/2] = Biome::SWAMP;
+            worldGrid[y+worldSize/2][x+worldSize/2] = Biome::MOUNTAINS;
         }
     }
 

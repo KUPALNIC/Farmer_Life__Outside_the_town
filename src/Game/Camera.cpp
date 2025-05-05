@@ -1,5 +1,6 @@
 #include "Camera.hpp"
-
+#include <SFML/Window/Event.hpp>
+#include <SFML/Window/Mouse.hpp>
 
 Camera::Camera() : zoomLevel(1.0f) {
     view.setSize({800, 600});
@@ -8,7 +9,8 @@ Camera::Camera() : zoomLevel(1.0f) {
 
 void Camera::handleInput(const sf::Event& event) {
     if (event.is<sf::Event::MouseWheelScrolled>()) {
-        if (sf::Event::MouseWheelScrolled::delta > 0) {
+        sf::Event::MouseWheelScrolled mouse;
+        if (mouse.delta > 0) {
             zoomLevel *= 0.9f;
         } else {
             zoomLevel *= 1.1f;

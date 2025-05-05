@@ -3,7 +3,7 @@
 
 int main() {
     // Создаем окно приложения
-    sf::RenderWindow window(sf::VideoMode({800, 600}), "Harvest Valley");
+    sf::RenderWindow window(sf::VideoMode({1920, 1080}), "Harvest Valley");
     window.setFramerateLimit(60);
 
     // Инициализация игры

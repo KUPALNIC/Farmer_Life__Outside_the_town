@@ -19,5 +19,5 @@ add_executable(Farmer_Life__Outside_the_town
         src/Game/World.cpp
         src/Game/World.hpp)
 
-find_package(SFML COMPONENTS System Window Graphics REQUIRED)
+find_package(SFML 3.0 COMPONENTS System Window Graphics REQUIRED)
 target_link_libraries(Farmer_Life__Outside_the_town sfml-graphics sfml-window sfml-system)

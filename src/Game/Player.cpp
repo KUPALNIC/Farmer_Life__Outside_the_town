@@ -2,14 +2,20 @@
 
 Player::Player() : position(400.0f, 300.0f), selectedSlot(0) {
     sprite.setRadius(16.0f);
-    sprite.setFillColor(sf::Color::Green);
+    sprite.setFillColor(sf::Color::Red);
     sprite.setPosition(position);
 }
 
+
+int operator-(sf::Keyboard::Key key, sf::Keyboard::Key rhs) {
+
+};
+
 void Player::handleInput(const sf::Event& event) {
     if (event.is<sf::Event::KeyPressed>()) {
-        if (event.is<sf::Keyboard::Key> >= sf::Keyboard::Key::Num1 && event.key.code <= sf::Keyboard::Key::Num9) {
-            selectedSlot = event.is<sf::Keyboard::Key>() - sf::Keyboard::Key::Num1;
+        sf::Event::KeyPressed key_code;
+        if (key_code.code >= sf::Keyboard::Key::Num1 && key_code.code <= sf::Keyboard::Key::Num9) {
+            selectedSlot = key_code.code - sf::Keyboard::Key::Num1;
         }
     }
 }
