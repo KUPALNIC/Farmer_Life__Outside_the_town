@@ -224,6 +224,12 @@ Farmer_Life__Outside_the_town_IS_TOP_LEVEL:STATIC=ON
 //Value Computed by CMake
 Farmer_Life__Outside_the_town_SOURCE_DIR:STATIC=/home/kupalnic/CLionProjects/Farmer Life: Outside the town
 
+//The directory containing a CMake configuration file for SFML.
+SFML_DIR:PATH=/usr/lib/cmake/SFML
+
+//Path to a file.
+SFML_DOC_DIR:PATH=/usr/share/doc/SFML
+
 
 ########################
 # INTERNAL cache entries

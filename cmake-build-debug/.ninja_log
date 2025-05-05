@@ -1,0 +1,5 @@
+# ninja log v6
+517	577	1746455798503945906	Farmer_Life__Outside_the_town	1c8670dbb8f0f9e3
+1	516	1746455797987959810	CMakeFiles/Farmer_Life__Outside_the_town.dir/src/main.cpp.o	390cee7940cb337
+1	492	1746455579051281116	CMakeFiles/Farmer_Life__Outside_the_town.dir/src/Game/Game.cpp.o	2f16d7d3c674d014
+0	16	1746459062130460637	build.ninja	ae69ce4823cf54
