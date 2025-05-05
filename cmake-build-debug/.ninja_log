@@ -18,3 +18,13 @@
 509	561	1746482060445382310	Farmer_Life__Outside_the_town	8179be537c867d1f
 1	537	1746485089168386573	CMakeFiles/Farmer_Life__Outside_the_town.dir/src/Game/World.cpp.o	d3392db27a60529a
 537	597	1746485089705377634	Farmer_Life__Outside_the_town	8179be537c867d1f
+1	745	1746488455269471750	CMakeFiles/Farmer_Life__Outside_the_town.dir/src/main.cpp.o	390cee7940cb337
+1	750	1746488455271161584	CMakeFiles/Farmer_Life__Outside_the_town.dir/src/Game/World.cpp.o	d3392db27a60529a
+1	827	1746488455271036921	CMakeFiles/Farmer_Life__Outside_the_town.dir/src/Game/Game.cpp.o	2f16d7d3c674d014
+827	887	1746488456095455003	Farmer_Life__Outside_the_town	8179be537c867d1f
+5	875	1746488837864944414	CMakeFiles/Farmer_Life__Outside_the_town.dir/src/main.cpp.o	390cee7940cb337
+6	878	1746488837866687598	CMakeFiles/Farmer_Life__Outside_the_town.dir/src/Game/World.cpp.o	d3392db27a60529a
+6	951	1746488837865944394	CMakeFiles/Farmer_Life__Outside_the_town.dir/src/Game/Game.cpp.o	2f16d7d3c674d014
+951	1032	1746488838810926247	Farmer_Life__Outside_the_town	8179be537c867d1f
+1	490	1746489083600273809	CMakeFiles/Farmer_Life__Outside_the_town.dir/src/Game/Camera.cpp.o	7646e1172db0224e
+490	542	1746489084089264597	Farmer_Life__Outside_the_town	8179be537c867d1f
