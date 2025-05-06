@@ -1,7 +1,7 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 #include <array>
-// #include "Tool.hpp"
+#include "/home/kupalnic/CLionProjects/Farmer Life: Outside the town/src/Objects/Tool.hpp"
 
 class Player {
 public:
@@ -17,6 +17,6 @@ private:
     sf::Vector2f position;
     sf::CircleShape sprite; // Временный спрайт игрока
 
-    // std::array<Tool*, 9> hotbar; // Слоты инвентаря
+    std::array<Tool*, 9> hotbar; // Слоты инвентаря
     int selectedSlot; // Текущий выбранный слот
 };

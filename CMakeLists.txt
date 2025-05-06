@@ -17,7 +17,15 @@ add_executable(Farmer_Life__Outside_the_town
         src/Game/Camera.cpp
         src/Game/Camera.hpp
         src/Game/World.cpp
-        src/Game/World.hpp)
+        src/Game/World.hpp
+        src/Objects/Crop.cpp
+        src/Objects/Crop.hpp
+        src/Objects/Bed.hpp
+        src/Objects/Bed.cpp
+        src/Objects/Tree.cpp
+        src/Objects/Tree.hpp
+        src/Objects/Tool.cpp
+        src/Objects/Tool.h)
 
 find_package(SFML 3.0 COMPONENTS System Window Graphics REQUIRED)
 target_link_libraries(Farmer_Life__Outside_the_town sfml-graphics sfml-window sfml-system)
