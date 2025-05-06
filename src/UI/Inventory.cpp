@@ -31,21 +31,26 @@ void Inventory::handleInput(const sf::Event& event) {
     }
 }
 
-void Inventory::updatePosition(const sf::View& cameraView) {
-    sf::Vector2f viewCenter = cameraView.getCenter();
-    sf::Vector2f viewSize = cameraView.getSize();
-    // Расчет новой позиции инвентаря
+void Inventory::updatePosition(const sf::Vector2u& windowSize) {
+    // Центрируем инвентарь по горизонтали и фиксируем его снизу
     float inventoryWidth = totalSlots * (slotSize + 5.0f) - 5.0f; // Общая ширина инвентаря
-    float xPosition = viewCenter.x - inventoryWidth / 2.0f; // Центрирование по горизонтали
-    float yPosition = viewCenter.y + viewSize.y / 2.0f - slotSize - 20.0f; // Снизу на 20 пикселей
+    float xPosition = (windowSize.x - inventoryWidth) / 2.0f; // Центрирование по горизонтали
+    float yPosition = windowSize.y - slotSize - 20.0f;       // Отступ от нижнего края
 
-    // Обновление позиции слотов
+    // Обновляем позиции слотов в соответствии с новыми координатами
     for (int i = 0; i < totalSlots; ++i) {
         slots[i].setPosition({xPosition + i * (slotSize + 5.0f), yPosition});
     }
 }
 
 void Inventory::render(sf::RenderWindow& window) {
+    // Сохраняем текущий вид
+    sf::View originalView = window.getView();
+
+    // Устанавливаем вид по умолчанию (экранные координаты)
+    window.setView(window.getDefaultView());
+
+    // Рисуем инвентарь
     for (size_t i = 0; i < slots.size(); ++i) {
         if (i == selectedSlot) {
             slots[i].setOutlineColor(sf::Color::Yellow);
@@ -54,6 +59,9 @@ void Inventory::render(sf::RenderWindow& window) {
         }
         window.draw(slots[i]);
     }
+
+    // Восстанавливаем оригинальный вид
+    window.setView(originalView);
 }
 
 int Inventory::getSelectedSlot() const {
