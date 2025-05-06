@@ -4,6 +4,7 @@
 #include <random>
 
 enum class Biome { PLAINS, FOREST, SWAMP, MOUNTAINS };
+enum class CellType { EMPTY, BED, TREE }; // Типы клеток
 
 class World {
 public:
@@ -11,21 +12,18 @@ public:
 
     void update(float deltaTime);
     void render(sf::RenderWindow& window);
-
-private:
+    int getCellSize() const;
+    // Новые методы для взаимодействия
+    void interactWithCell(int gridX, int gridY, CellType type);
+    CellType getCellType(int gridX, int gridY) const;
+    private:
     const int worldSize = 100; // Размер карты (в клетках)
     const int cellSize = 32;   // Размер клетки (в пикселях)
-
     std::array<std::array<Biome, 100>, 100> worldGrid;  // Матрица биомов
-    std::array<std::array<sf::Color, 100>, 100> colorGrid; // Цвета клеток биомов
-    sf::RectangleShape cell;                            // Временный спрайт клетки
+    std::array<std::array<CellType, 100>, 100> cellGrid; // Типы клеток
+    std::array<std::array<sf::Color, 100>, 100> colorGrid; // Цвета клеток
+    sf::RectangleShape cell; // Временный спрайт клетки
 
-    // Генерация биома для определенной области
     void generateBiome(int startX, int startY, int width, int height, Biome biome);
-
-    // Получение случайного цвета для конкретного биома
     sf::Color getRandomBiomeColor(Biome biome);
-
-    // TODO: Заменить квадраты на спрайты
-    // Вы можете добавить сюда std::map<Biome, sf::Texture> для хранения текстур.
 };

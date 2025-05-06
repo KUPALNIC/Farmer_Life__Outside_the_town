@@ -3,6 +3,7 @@
 #include "Player.hpp"
 #include "Camera.hpp"
 #include "World.hpp"
+#include "/home/kupalnic/CLionProjects/Farmer Life: Outside the town/src/UI/Inventory.hpp"
 
 class Game {
 public:
@@ -17,6 +18,6 @@ private:
     Player player;
     Camera camera;
     World world;
-
+    Inventory inventory;
     sf::Font font;
 };
