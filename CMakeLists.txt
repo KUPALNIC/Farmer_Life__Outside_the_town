@@ -25,7 +25,7 @@ add_executable(Farmer_Life__Outside_the_town
         src/Objects/Tree.cpp
         src/Objects/Tree.hpp
         src/Objects/Tool.cpp
-        src/Objects/Tool.h)
+        src/Objects/Tool.hpp)
 
 find_package(SFML 3.0 COMPONENTS System Window Graphics REQUIRED)
 target_link_libraries(Farmer_Life__Outside_the_town sfml-graphics sfml-window sfml-system)
