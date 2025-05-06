@@ -1,5 +1,7 @@
 #include "Player.hpp"
 
+#include <iostream>
+
 Player::Player() : position(400.0f, 300.0f), selectedSlot(0) {
     sprite.setRadius(16.0f);
     sprite.setFillColor(sf::Color::Red);
@@ -7,15 +9,15 @@ Player::Player() : position(400.0f, 300.0f), selectedSlot(0) {
 }
 
 
-int operator-(sf::Keyboard::Key key, sf::Keyboard::Key rhs) {
-
-};
 
 void Player::handleInput(const sf::Event& event) {
-    if (event.is<sf::Event::KeyPressed>()) {
-        sf::Event::KeyPressed key_code;
-        if (key_code.code >= sf::Keyboard::Key::Num1 && key_code.code <= sf::Keyboard::Key::Num9) {
-            selectedSlot = key_code.code - sf::Keyboard::Key::Num1;
+    if (auto keyPressEvent = event.getIf<sf::Event::KeyPressed>()) {
+        // Convert key codes to integers for comparison
+        auto keyCode = static_cast<std::underlying_type_t<sf::Keyboard::Key>>(keyPressEvent->code);
+        auto num1Code = static_cast<std::underlying_type_t<sf::Keyboard::Key>>(sf::Keyboard::Key::Num1);
+
+        if (keyCode >= num1Code && keyCode <= num1Code + 8) {
+            selectedSlot = keyCode - num1Code;
         }
     }
 }

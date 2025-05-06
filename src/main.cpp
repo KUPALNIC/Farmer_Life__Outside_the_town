@@ -2,25 +2,21 @@
 #include "Game/Game.hpp"
 
 int main() {
-    // Создаем окно приложения
     sf::RenderWindow window(sf::VideoMode({1920, 1080}), "Harvest Valley");
     window.setFramerateLimit(60);
 
-    // Инициализация игры
     Game game;
 
-    // Основной игровой цикл
-    while (window.isOpen())
-    {
-        while (const std::optional event = window.pollEvent())
-        {
-            if (event->is<sf::Event::Closed>())
+    while (window.isOpen()) {
+        while (const std::optional<sf::Event> event = window.pollEvent()) {
+            if (event->is<sf::Event::Closed>()) {
                 window.close();
+            } else {
+                game.handleInput(*event);
+            }
         }
-        // Обновляем состояние игры
-        game.update();
 
-        // Отрисовка
+        game.update();
         window.clear();
         game.render(window);
         window.display();

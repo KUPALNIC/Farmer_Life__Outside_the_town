@@ -1,6 +1,5 @@
 #pragma once
 #include <SFML/Graphics.hpp>
-#include <SFML/Window/Event.hpp>
 
 class Camera {
 public:
@@ -13,4 +12,8 @@ public:
 private:
     sf::View view;
     float zoomLevel;
+    float targetZoomLevel; // Целевое значение зума
+    const float zoomSpeed = 2.0f; // Скорость изменения зума
+    const float minZoom = 0.5f; // Минимальный зум
+    const float maxZoom = 5.0f; // Максимальный зум
 };

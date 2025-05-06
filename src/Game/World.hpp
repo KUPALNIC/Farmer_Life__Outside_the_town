@@ -13,11 +13,11 @@ public:
     void render(sf::RenderWindow& window);
 
 private:
-    const int worldSize = 150; // Размер карты (в клетках)
+    const int worldSize = 100; // Размер карты (в клетках)
     const int cellSize = 32;   // Размер клетки (в пикселях)
 
-    std::array<std::array<Biome, 150>, 150> worldGrid;  // Матрица биомов
-    std::array<std::array<sf::Color, 150>, 150> colorGrid; // Цвета клеток биомов
+    std::array<std::array<Biome, 100>, 100> worldGrid;  // Матрица биомов
+    std::array<std::array<sf::Color, 100>, 100> colorGrid; // Цвета клеток биомов
     sf::RectangleShape cell;                            // Временный спрайт клетки
 
     // Генерация биома для определенной области
