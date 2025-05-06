@@ -1,7 +1,7 @@
 #include "Game.hpp"
 #include <iostream>
 
-Game::Game(): inventory(9, 32.f, {400,300}) {
+Game::Game(): inventory(9, 32.f, {200,20}) {
     if (!font.openFromFile("assets/fonts/default.ttf")) {
         std::cerr << "Ошибка загрузки шрифта!" << std::endl;
     }
@@ -12,6 +12,7 @@ Game::~Game() {}
 void Game::handleInput(const sf::Event& event) {
     player.handleInput(event);
     camera.handleInput(event);
+    inventory.handleInput(event);
     if (event.is<sf::Event::MouseButtonPressed>()) {
         auto mouseEvent = event.getIf<sf::Event::MouseButtonPressed>();
         if (mouseEvent && mouseEvent->button == sf::Mouse::Button::Left) {
@@ -30,10 +31,12 @@ void Game::update() {
     player.update(deltaTime);
     world.update(deltaTime);
     camera.update(deltaTime, player.getPosition());
+    camera.updateInventoryPosition(inventory);
 }
 
 void Game::render(sf::RenderWindow& window) {
     camera.apply(window);
     world.render(window);
     player.render(window);
+    inventory.render(window);
 }

@@ -9,6 +9,7 @@ public:
 
     void handleInput(const sf::Event& event);
     void render(sf::RenderWindow& window);
+    void updatePosition(const sf::View& cameraView);
 
     int getSelectedSlot() const;
 

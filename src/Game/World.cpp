@@ -74,7 +74,7 @@ void World::interactWithCell(int gridX, int gridY, CellType type) {
     switch (type) {
     case CellType::BED:
         cellGrid[gridY][gridX] = CellType::BED;
-        colorGrid[gridY][gridX] = sf::Color::Green; // Цвет для грядки
+        colorGrid[gridY][gridX] = sf::Color::Magenta; // Цвет для грядки
         break;
     case CellType::TREE:
         cellGrid[gridY][gridX] = CellType::TREE;
