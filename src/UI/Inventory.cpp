@@ -2,6 +2,8 @@
 
 #include <iostream>
 
+#include "../Objects/Tool.hpp"
+
 Inventory::Inventory(int slots, float slotSize, const sf::Vector2f& position)
     : totalSlots(slots), slotSize(slotSize), position(position), selectedSlot(0) {
     for (int i = 0; i < totalSlots; ++i) {
@@ -42,6 +44,10 @@ void Inventory::updatePosition(const sf::Vector2u& windowSize) {
         slots[i].setPosition({xPosition + i * (slotSize + 5.0f), yPosition});
     }
 }
+
+// Tool::Type getCurrentTool() {
+//     return
+// }
 
 void Inventory::render(sf::RenderWindow& window) {
     // Сохраняем текущий вид

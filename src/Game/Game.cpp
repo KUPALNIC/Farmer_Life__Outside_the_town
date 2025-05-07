@@ -9,23 +9,36 @@ Game::Game(): inventory(9, 64.f, {650,1000}) {
 
 Game::~Game() {}
 
-void Game::handleInput(const sf::Event& event) {
+void Game::handleInput(const sf::Event& event, const sf::RenderWindow& window) {
     player.handleInput(event);
     camera.handleInput(event);
     inventory.handleInput(event);
-//     if (event.is<sf::Event::Resized>) {
-//     inventory.updatePosition({, event.size.height});
-// }
     if (event.is<sf::Event::MouseButtonPressed>()) {
         auto mouseEvent = event.getIf<sf::Event::MouseButtonPressed>();
         if (mouseEvent && mouseEvent->button == sf::Mouse::Button::Left) {
-            const sf::Vector2i mousePosition = sf::Mouse::getPosition();
-            sf::RenderWindow m_window;
-            const sf::Vector2f worldPosition = m_window.mapPixelToCoords(mousePosition);
-            int gridX = static_cast<int>(worldPosition.x) / world.getCellSize();
-            int gridY = static_cast<int>(worldPosition.y) / world.getCellSize();
-            world.interactWithCell(gridX, gridY, CellType::BED); // Пример: установка грядки
+            // получаем координаты клика внутри окна
+            sf::Vector2i pixelPos(mouseEvent->position.x, mouseEvent->position.y);
+            // используем то же окно, которое рендерим
+            sf::Vector2f worldPos = window.mapPixelToCoords(pixelPos);
+            int gridX = static_cast<int>(worldPos.x) / world.getCellSize();
+            int gridY = static_cast<int>(worldPos.y) / world.getCellSize();
+            if (world.getCellType(gridX, gridY) == CellType::EMPTY) {
+                world.interactWithCell(gridX, gridY, CellType::BED);
+            }
         }
+        if (mouseEvent && mouseEvent->button == sf::Mouse::Button::Middle) {
+            // получаем координаты клика внутри окна
+            sf::Vector2i pixelPos(mouseEvent->position.x, mouseEvent->position.y);
+            // используем то же окно, которое рендерим
+            sf::Vector2f worldPos = window.mapPixelToCoords(pixelPos);
+            int gridX = static_cast<int>(worldPos.x) / world.getCellSize();
+            int gridY = static_cast<int>(worldPos.y) / world.getCellSize();
+            // std::cout << gridX << ", " << gridY << std::endl;
+            if (world.getCellType(gridX, gridY) == CellType::EMPTY) {
+                world.interactWithCell(gridX, gridY, CellType::TREE);
+            }
+        }
+
     }
 }
 
@@ -34,8 +47,6 @@ void Game::update() {
     player.update(deltaTime);
     world.update(deltaTime);
     camera.update(deltaTime, player.getPosition());
-
-
 }
 
 void Game::render(sf::RenderWindow& window) {

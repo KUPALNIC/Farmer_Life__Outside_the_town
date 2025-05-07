@@ -12,7 +12,7 @@ int main() {
             if (event->is<sf::Event::Closed>()) {
                 window.close();
             } else {
-                game.handleInput(*event);
+                game.handleInput(*event, window);
             }
         }
 

@@ -50,13 +50,25 @@ sf::Color World::getRandomBiomeColor(Biome biome) {
 }
 
 void World::update(float deltaTime) {
-    // Обновление логики мира
-}
+    for (int y = 0; y < worldSize; ++y) {
+        for (int x = 0; x < worldSize; ++x) {
+            switch (cellGrid[y][x]) {
+                case CellType::BED:
+                    // Если грядка должна изменяться со временем (например, рост урожая), добавьте сюда логику
+                        colorGrid[y][x] = sf::Color::Magenta; // Убедитесь, что цвет остаётся корректным
+                break;
 
+                case CellType::TREE:
+                    // Логика для деревьев, если требуется
+                        colorGrid[y][x] = sf::Color::Blue;
+                break;
+            }
+        }
+    }
+}
 int World::getCellSize() const {
     return cellSize;
 }
-
 
 void World::render(sf::RenderWindow& window) {
     for (int y = 0; y < worldSize; ++y) {
@@ -79,10 +91,6 @@ void World::interactWithCell(int gridX, int gridY, CellType type) {
     case CellType::TREE:
         cellGrid[gridY][gridX] = CellType::TREE;
         colorGrid[gridY][gridX] = sf::Color::Blue; // Цвет для дерева
-        break;
-    case CellType::EMPTY:
-        cellGrid[gridY][gridX] = CellType::EMPTY;
-        colorGrid[gridY][gridX] = getRandomBiomeColor(worldGrid[gridY][gridX]);
         break;
     }
 }

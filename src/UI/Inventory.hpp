@@ -10,7 +10,7 @@ public:
     void handleInput(const sf::Event& event);
     void render(sf::RenderWindow& window);
     void updatePosition(const sf::Vector2u& windowSize);
-
+    // void getCurrentTool();
     int getSelectedSlot() const;
 
 private:

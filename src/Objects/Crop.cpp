@@ -20,3 +20,8 @@ void Crop::render(sf::RenderWindow& window) {
 bool Crop::isReadyToHarvest() const {
     return growthStage >= 1.0f;
 }
+
+void Crop::plant() {
+    growthStage = 0.0f; // Сброс стадии роста при посеве
+    sprite.setFillColor(sf::Color::Red);
+}
