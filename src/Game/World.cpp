@@ -92,6 +92,11 @@ void World::interactWithCell(int gridX, int gridY, CellType type) {
         cellGrid[gridY][gridX] = CellType::TREE;
         colorGrid[gridY][gridX] = sf::Color::Blue; // Цвет для дерева
         break;
+    case CellType::EMPTY:
+        // Возвращаем «чистую» клетку биома
+        cellGrid[gridY][gridX] = CellType::EMPTY;
+        colorGrid[gridY][gridX] = getRandomBiomeColor(worldGrid[gridY][gridX]);
+        break;
     }
 }
 

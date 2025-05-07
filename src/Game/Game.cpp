@@ -33,13 +33,24 @@ void Game::handleInput(const sf::Event& event, const sf::RenderWindow& window) {
             sf::Vector2f worldPos = window.mapPixelToCoords(pixelPos);
             int gridX = static_cast<int>(worldPos.x) / world.getCellSize();
             int gridY = static_cast<int>(worldPos.y) / world.getCellSize();
-            // std::cout << gridX << ", " << gridY << std::endl;
             if (world.getCellType(gridX, gridY) == CellType::EMPTY) {
                 world.interactWithCell(gridX, gridY, CellType::TREE);
             }
         }
-
+        if (mouseEvent->button == sf::Mouse::Button::Right) {
+            sf::Vector2i pixelPos(mouseEvent->position.x, mouseEvent->position.y);
+            sf::Vector2f worldPos = window.mapPixelToCoords(pixelPos);
+            removeGridX = static_cast<int>(worldPos.x) / world.getCellSize();
+            removeGridY = static_cast<int>(worldPos.y) / world.getCellSize();
+            isRemoving = true;
+            removeClock.restart();
+        }
+        // if (mouseEvent->button == sf::Mouse::Button::Right) {
+        //     // Отмена удаления, если не успели 2 сек
+        //     isRemoving = false;
+        // }
     }
+
 }
 
 void Game::update() {
@@ -47,6 +58,10 @@ void Game::update() {
     player.update(deltaTime);
     world.update(deltaTime);
     camera.update(deltaTime, player.getPosition());
+    if (isRemoving && removeClock.getElapsedTime().asSeconds() >= 2.0f) {
+        world.interactWithCell(removeGridX, removeGridY, CellType::EMPTY);
+        isRemoving = false; // сброс
+    }
 }
 
 void Game::render(sf::RenderWindow& window) {
