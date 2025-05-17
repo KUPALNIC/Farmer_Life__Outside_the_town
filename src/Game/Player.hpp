@@ -7,17 +7,19 @@ class Player {
 public:
     Player();
 
-    void handleInput(const sf::Event& event);
+    // void handleInput(sf::Event& event);
     void update(float deltaTime);
     void render(sf::RenderWindow& window);
-
     sf::Vector2f getPosition() const;
 
 private:
     sf::Vector2f position;
-    sf::Texture PlayerTexture;
+    sf::Texture forwardTexture;
+    sf::Texture backwardTexture;
     sf::Sprite PlayerSprite;
+    float currentFrame;
+    bool facingLeft;
 
-    std::array<Tool*, 9> hotbar{}; // Слоты инвентаря
-    int selectedSlot; // Текущий выбранный слот
+    std::array<Tool*, 9> hotbar{};
+    int selectedSlot;
 };

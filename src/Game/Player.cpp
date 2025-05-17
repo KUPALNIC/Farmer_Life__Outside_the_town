@@ -1,39 +1,74 @@
 #include "Player.hpp"
 
-
-Player::Player() : position(400.0f, 300.0f), PlayerSprite(PlayerTexture),selectedSlot(0) {
-    PlayerTexture.loadFromFile("/home/kupalnic/CLionProjects/Farmer Life: Outside the town/assets/textures/forward.png");
-    sf::Sprite PlayerSprite(PlayerTexture);
+Player::Player() :
+    position(400.0f, 300.0f),
+    currentFrame(0.0f),
+    facingLeft(false),
+PlayerSprite(forwardTexture),
+    selectedSlot(0)
+{
+    forwardTexture.loadFromFile("/home/kupalnic/CLionProjects/Farmer Life: Outside the town/assets/textures/forward.png");
+    backwardTexture.loadFromFile("/home/kupalnic/CLionProjects/Farmer Life: Outside the town/assets/textures/backward.png");
+    PlayerSprite.setTexture(forwardTexture);
     PlayerSprite.setTextureRect(sf::IntRect({0, 0}, {32, 32}));
+    PlayerSprite.setOrigin({16.0f, 16.0f});
     PlayerSprite.setPosition(position);
-
-}
-
-
-
-void Player::handleInput(const sf::Event& event) {
-    if (auto keyPressEvent = event.getIf<sf::Event::KeyPressed>()) {
-        // Convert key codes to integers for comparison
-        auto keyCode = static_cast<std::underlying_type_t<sf::Keyboard::Key>>(keyPressEvent->code);
-        auto num1Code = static_cast<std::underlying_type_t<sf::Keyboard::Key>>(sf::Keyboard::Key::Num1);
-
-        if (keyCode >= num1Code && keyCode <= num1Code + 8) {
-            selectedSlot = keyCode - num1Code;
-        }
-    }
+    PlayerSprite.setScale({2.0f, 2.0f});
 }
 
 void Player::update(float deltaTime) {
-    const float speed = 200.0f;
+    const float speed = 300.0f;
     sf::Vector2f movement(0.0f, 0.0f);
+    bool isMoving = false;
 
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W)) movement.y -= speed * deltaTime;
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::S)) movement.y += speed * deltaTime;
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A)) movement.x -= speed * deltaTime;
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D)) movement.x += speed * deltaTime;
+    // Handle movement and animation
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W)) {
+        movement.y -= speed * deltaTime;
+        PlayerSprite.setTexture(backwardTexture);
+        currentFrame +=  0.1f * deltaTime * 60.0f;
+        if (currentFrame >= 4.0f) currentFrame -= 4.0f;
+        PlayerSprite.setTextureRect(sf::IntRect({32 * static_cast<int>(currentFrame), 0}, {32, 32}));
+        isMoving = true;
+    }
+    else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::S)) {
+        movement.y += speed * deltaTime;
+        PlayerSprite.setTexture(forwardTexture);
+        currentFrame +=  0.1f * deltaTime * 60.0f;
+        if (currentFrame >= 4.0f) currentFrame -= 4.0f;
+        PlayerSprite.setTextureRect(sf::IntRect({32 * static_cast<int>(currentFrame), 0}, {32, 32}));
+        isMoving = true;
+    }
 
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A)) {
+        movement.x -= speed * deltaTime;
+        PlayerSprite.setTexture(forwardTexture);
+        currentFrame +=  0.1f * deltaTime * 60.0f;
+        if (currentFrame >= 4.0f) currentFrame -= 4.0f;
+        PlayerSprite.setTextureRect(sf::IntRect({32 * static_cast<int>(currentFrame), 0}, {32, 32}));
+        PlayerSprite.setScale({-2.0f, 2.0f}); // Flip sprite horizontally
+        facingLeft = true;
+        isMoving = true;
+    }
+    else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D)) {
+        movement.x += speed * deltaTime;
+        PlayerSprite.setTexture(forwardTexture);
+        currentFrame +=  0.1f * deltaTime * 60.0f;
+        if (currentFrame >= 4.0f) currentFrame -= 4.0f;
+        PlayerSprite.setTextureRect(sf::IntRect({32 * static_cast<int>(currentFrame), 0}, {32, 32}));
+        PlayerSprite.setScale({2.0f, 2.0f}); // Normal scale
+        facingLeft = false;
+        isMoving = true;
+    }
+
+    // Update position
     position += movement;
     PlayerSprite.setPosition(position);
+
+    // If not moving, reset to idle frame
+    if (!isMoving) {
+        currentFrame = 0;
+        PlayerSprite.setTextureRect(sf::IntRect({0, 0}, {32, 32}));
+    }
 }
 
 void Player::render(sf::RenderWindow& window) {

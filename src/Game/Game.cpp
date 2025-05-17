@@ -10,7 +10,7 @@ Game::Game(): inventory(9, 64.f, {650,1000}) {
 Game::~Game() {}
 
 void Game::handleInput(const sf::Event& event, const sf::RenderWindow& window) {
-    player.handleInput(event);
+    // player.handleInput(event);
     camera.handleInput(event);
     inventory.handleInput(event);
     if (event.is<sf::Event::MouseButtonPressed>()) {
