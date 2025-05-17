@@ -1,11 +1,12 @@
 #include "Player.hpp"
 
-#include <iostream>
 
-Player::Player() : position(400.0f, 300.0f), selectedSlot(0) {
-    sprite.setRadius(16.0f);
-    sprite.setFillColor(sf::Color::Red);
-    sprite.setPosition(position);
+Player::Player() : position(400.0f, 300.0f), PlayerSprite(PlayerTexture),selectedSlot(0) {
+    PlayerTexture.loadFromFile("/home/kupalnic/CLionProjects/Farmer Life: Outside the town/assets/textures/forward.png");
+    sf::Sprite PlayerSprite(PlayerTexture);
+    PlayerSprite.setTextureRect(sf::IntRect({0, 0}, {32, 32}));
+    PlayerSprite.setPosition(position);
+
 }
 
 
@@ -32,11 +33,11 @@ void Player::update(float deltaTime) {
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D)) movement.x += speed * deltaTime;
 
     position += movement;
-    sprite.setPosition(position);
+    PlayerSprite.setPosition(position);
 }
 
 void Player::render(sf::RenderWindow& window) {
-    window.draw(sprite);
+    window.draw(PlayerSprite);
 }
 
 sf::Vector2f Player::getPosition() const {

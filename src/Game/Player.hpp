@@ -15,8 +15,9 @@ public:
 
 private:
     sf::Vector2f position;
-    sf::CircleShape sprite; // Временный спрайт игрока
+    sf::Texture PlayerTexture;
+    sf::Sprite PlayerSprite;
 
-    std::array<Tool*, 9> hotbar; // Слоты инвентаря
+    std::array<Tool*, 9> hotbar{}; // Слоты инвентаря
     int selectedSlot; // Текущий выбранный слот
 };
