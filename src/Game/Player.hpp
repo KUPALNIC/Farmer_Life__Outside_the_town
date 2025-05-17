@@ -12,8 +12,10 @@ public:
     void update(float deltaTime);
     void render(sf::RenderWindow& window);
     sf::Vector2f getPosition() const;
-
     Tool *getSelectedTool() const;
+    const std::array<Tool*, 9>& getHotbar() const { return hotbar; }
+    void setSelectedSlot(int idx);
+    int getSelectedSlotIndex() const;
 
 private:
     World& world;
@@ -23,8 +25,6 @@ private:
     sf::Sprite PlayerSprite;
     float currentFrame;
     bool facingLeft;
-
     std::array<Tool*, 9> hotbar{};
-    const std::array<Tool*, 9>& getHotbar() const { return hotbar; }
     int selectedSlot;
 };

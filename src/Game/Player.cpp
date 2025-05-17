@@ -1,21 +1,21 @@
 #include "Player.hpp"
+#include "../UI/Inventory.hpp"
+
 
 Player::Player(World& worldRef) : world(worldRef),
-                   position(400.0f, 300.0f),
-                   currentFrame(0.0f),
-                   facingLeft(false),
-                   PlayerSprite(forwardTexture),
-                   selectedSlot(0) {
-    forwardTexture.loadFromFile(
-        "/home/kupalnic/CLionProjects/Farmer Life: Outside the town/assets/textures/forward.png");
-    backwardTexture.loadFromFile(
-        "/home/kupalnic/CLionProjects/Farmer Life: Outside the town/assets/textures/backward.png");
+                                  position(400.0f, 300.0f),
+                                  currentFrame(0.0f),
+                                  facingLeft(false),
+                                  PlayerSprite(forwardTexture){
+    forwardTexture.loadFromFile("/home/kupalnic/CLionProjects/Farmer Life: Outside the town/assets/textures/forward.png");
+    backwardTexture.loadFromFile("/home/kupalnic/CLionProjects/Farmer Life: Outside the town/assets/textures/backward.png");
     PlayerSprite.setTexture(forwardTexture);
     PlayerSprite.setTextureRect(sf::IntRect({0, 0}, {32, 32}));
     PlayerSprite.setOrigin({16.0f, 16.0f});
     PlayerSprite.setPosition(position);
     PlayerSprite.setScale({2.0f, 2.0f});
     extern sf::Texture toolsTexture;
+    toolsTexture.loadFromFile("/home/kupalnic/CLionProjects/Farmer Life: Outside the town/assets/textures/tools.png");
     hotbar[0] = new Tool(Tool::Type::Axe, toolsTexture, sf::IntRect({0,0},{16,16}));
     hotbar[1] = new Tool(Tool::Type::Hoe, toolsTexture, sf::IntRect({16,0},{16,16}));
     hotbar[2] = new Tool(Tool::Type::WateringCan, toolsTexture, sf::IntRect({32,0},{16,16}));
@@ -89,14 +89,20 @@ void Player::update(float deltaTime) {
     }
 }
 
+void Player::setSelectedSlot(int idx) {
+    if (idx >= 0 && idx < hotbar.size())
+        selectedSlot = idx;
+}
+int Player::getSelectedSlotIndex() const {
+    return selectedSlot;
+}
+
 void Player::render(sf::RenderWindow& window) {
     window.draw(PlayerSprite);
-    // Если выбран инструмент — рисуем его поверх персонажа
     Tool* tool = hotbar[selectedSlot];
-    if (tool && tool->getType() != ToolType::NONE) {
-        // Позиция инструмента относительно персонажа (например, чуть правее центра)
-        sf::Vector2f toolPos = position + sf::Vector2f(8, 0); // смещение подбери по вкусу
-        tool->render(window, toolPos, 0.5f); // инструменты мельче персонажа
+    if (tool && tool->getType() != Tool::Type::None) {
+        sf::Vector2f toolPos = position + sf::Vector2f(0, 0); // смещение подбери по вкусу
+        tool->render(window, toolPos, 1.5f); // инструменты мельче персонажа
     }
 }
 
@@ -105,6 +111,7 @@ sf::Vector2f Player::getPosition() const {
 }
 
 Tool* Player::getSelectedTool() const {
+
     if (selectedSlot >= 0 && selectedSlot < hotbar.size())
         return hotbar[selectedSlot];
     return nullptr;

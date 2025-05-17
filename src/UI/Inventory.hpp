@@ -9,7 +9,7 @@ public:
     Inventory(int slots, float slotSize, const sf::Vector2f& position);
 
     void handleInput(const sf::Event& event);
-    void render(sf::RenderWindow& window, const std::array<Tool*, 9>& hotbar); // теперь render принимает hotbar
+    void render(sf::RenderWindow& window, const std::array<Tool*, 9>& hotbar);
     void updatePosition(const sf::Vector2u& windowSize);
     int getSelectedSlot() const;
 

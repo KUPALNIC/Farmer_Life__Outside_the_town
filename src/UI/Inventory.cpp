@@ -1,7 +1,4 @@
 #include "Inventory.hpp"
-
-#include <iostream>
-
 #include "../Objects/Tool.hpp"
 
 Inventory::Inventory(int slots, float slotSize, const sf::Vector2f& position)
@@ -14,11 +11,6 @@ Inventory::Inventory(int slots, float slotSize, const sf::Vector2f& position)
         slot.setOutlineThickness(2.0f);
         this->slots.push_back(slot);
     }
-    sf::Texture toolsTexture;
-    toolsTexture.loadFromFile("/home/kupalnic/CLionProjects/Farmer Life: Outside the town/assets/textures/tools.png");
-    hotbar[0] = new Tool(ToolType::AXE, toolsTexture, sf::IntRect({0,0},{16,16}));
-    hotbar[1] = new Tool(ToolType::PLOW, toolsTexture, sf::IntRect({16,0},{16,16}));
-    hotbar[2] = new Tool(ToolType::WATERING_CAN, toolsTexture, sf::IntRect({32,0},{16,16}));
 }
 
 void Inventory::handleInput(const sf::Event& event) {
@@ -49,10 +41,6 @@ void Inventory::updatePosition(const sf::Vector2u& windowSize) {
     }
 }
 
-// Tool::Type getCurrentTool() {
-//     return
-// }
-
 void Inventory::render(sf::RenderWindow& window, const std::array<Tool*, 9>& hotbar) {
     sf::View originalView = window.getView();
     window.setView(window.getDefaultView());
@@ -64,23 +52,16 @@ void Inventory::render(sf::RenderWindow& window, const std::array<Tool*, 9>& hot
             slots[i].setOutlineColor(sf::Color::White);
         }
         window.draw(slots[i]);
-        // Нарисовать иконку инструмента если есть
+
         if (hotbar[i]) {
-            // Загрузка текстуры должна быть централизована, тут предполагаем что у Tool есть спрайт
-            sf::Sprite toolSprite;
-            // Например, можно добавить в Tool метод getIconSprite()
-            if (hotbar[i]->getType() == Tool::Type::Axe ||
-                hotbar[i]->getType() == Tool::Type::Hoe ||
-                hotbar[i]->getType() == Tool::Type::WateringCan) {
-                toolSprite = hotbar[i]->getIconSprite();
-                // Центрируем по прямоугольнику
-                sf::Vector2f rectPos = slots[i].getPosition();
-                float slotCenterX = rectPos.x + slots[i].getSize().x / 2.0f;
-                float slotCenterY = rectPos.y + slots[i].getSize().y / 2.0f;
-                toolSprite.setPosition({slotCenterX - 8, slotCenterY - 8});
-                toolSprite.setScale({2.f, 2.f});
-                window.draw(toolSprite);
-                }
+            sf::Sprite icon = hotbar[i]->getIconSprite();
+            sf::Vector2f rectPos = slots[i].getPosition();
+            float slotCenterX = rectPos.x + slots[i].getSize().x / 2.0f;
+            float slotCenterY = rectPos.y + slots[i].getSize().y / 2.0f;
+            icon.setOrigin({8.f, 8.f}); // 16x16
+            icon.setPosition({slotCenterX, slotCenterY});
+            icon.setScale({3.f, 3.f}); //
+            window.draw(icon);
         }
     }
     window.setView(originalView);

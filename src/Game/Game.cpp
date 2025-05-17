@@ -16,28 +16,17 @@ void Game::handleInput(const sf::Event& event, const sf::RenderWindow& window) {
     inventory.handleInput(event);
     if (event.is<sf::Event::MouseButtonPressed>()) {
         auto mouseEvent = event.getIf<sf::Event::MouseButtonPressed>();
-        if (mouseEvent && mouseEvent->button == sf::Mouse::Button::Left) {
-            // получаем координаты клика внутри окна
-            sf::Vector2i pixelPos(mouseEvent->position.x, mouseEvent->position.y);
-            // используем то же окно, которое рендерим
-            sf::Vector2f worldPos = window.mapPixelToCoords(pixelPos);
-            int gridX = static_cast<int>(worldPos.x) / world.getCellSize();
-            int gridY = static_cast<int>(worldPos.y) / world.getCellSize();
-            if (world.getCellType(gridX, gridY) == CellType::EMPTY) {
-                world.interactWithCell(gridX, gridY, CellType::BED);
-            }
-        }
-        if (mouseEvent && mouseEvent->button == sf::Mouse::Button::Middle) {
-            // получаем координаты клика внутри окна
-            sf::Vector2i pixelPos(mouseEvent->position.x, mouseEvent->position.y);
-            // используем то же окно, которое рендерим
-            sf::Vector2f worldPos = window.mapPixelToCoords(pixelPos);
-            int gridX = static_cast<int>(worldPos.x) / world.getCellSize();
-            int gridY = static_cast<int>(worldPos.y) / world.getCellSize();
-            if (world.getCellType(gridX, gridY) == CellType::EMPTY) {
-                world.interactWithCell(gridX, gridY, CellType::TREE);
-            }
-        }
+        // if (mouseEvent && mouseEvent->button == sf::Mouse::Button::Middle) {
+        //     // получаем координаты клика внутри окна
+        //     sf::Vector2i pixelPos(mouseEvent->position.x, mouseEvent->position.y);
+        //     // используем то же окно, которое рендерим
+        //     sf::Vector2f worldPos = window.mapPixelToCoords(pixelPos);
+        //     int gridX = static_cast<int>(worldPos.x) / world.getCellSize();
+        //     int gridY = static_cast<int>(worldPos.y) / world.getCellSize();
+        //     if (world.getCellType(gridX, gridY) == CellType::EMPTY) {
+        //         world.interactWithCell(gridX, gridY, CellType::TREE);
+        //     }
+        // }
         if (mouseEvent->button == sf::Mouse::Button::Right) {
             sf::Vector2i pixelPos(mouseEvent->position.x, mouseEvent->position.y);
             sf::Vector2f worldPos = window.mapPixelToCoords(pixelPos);
@@ -46,28 +35,25 @@ void Game::handleInput(const sf::Event& event, const sf::RenderWindow& window) {
             isRemoving = true;
             removeClock.restart();
         }
-        // if (mouseEvent->button == sf::Mouse::Button::Right) {
-        //     // Отмена удаления, если не успели 2 сек
-        //     isRemoving = false;
-        // }
-        sf::Vector2i pixelPos(mouseEvent->position.x, mouseEvent->position.y);
-        sf::Vector2f worldPos = window.mapPixelToCoords(pixelPos);
-        int gridX = static_cast<int>(worldPos.x) / world.getCellSize();
-        int gridY = static_cast<int>(worldPos.y) / world.getCellSize();
-        Tool* tool = player.getSelectedTool();
-        if (tool) {
-            ToolType tt = tool->getType();
-            if (tt == ToolType::PLOW) {
-                if (world.getCellType(gridX, gridY) == CellType::EMPTY)
-                    world.interactWithCell(gridX, gridY, CellType::BED);
-            }
-            if (tt == ToolType::WATERING_CAN) {
-                if (world.getCellType(gridX, gridY) == CellType::BED)
-                    world.waterBed(gridX, gridY); // Новая функция, смотри ниже
+        if (mouseEvent->button == sf::Mouse::Button::Left) {
+            sf::Vector2i pixelPos(mouseEvent->position.x, mouseEvent->position.y);
+            sf::Vector2f worldPos = window.mapPixelToCoords(pixelPos);
+            int gridX = static_cast<int>(worldPos.x) / world.getCellSize();
+            int gridY = static_cast<int>(worldPos.y) / world.getCellSize();
+            Tool* tool = player.getSelectedTool();
+            if (tool) {
+                Tool::Type tt = tool->getType();
+                if (tt == Tool::Type::Hoe) {
+                    if (world.getCellType(gridX, gridY) == CellType::EMPTY)
+                        world.interactWithCell(gridX, gridY, CellType::BED);
+                }
+                if (tt == Tool::Type::WateringCan) {
+                    if (world.getCellType(gridX, gridY) == CellType::BED)
+                        world.waterBed(gridX, gridY); // Новая функция, смотри ниже
+                }
             }
         }
     }
-
 }
 
 void Game::update() {
@@ -79,6 +65,7 @@ void Game::update() {
         world.interactWithCell(removeGridX, removeGridY, CellType::EMPTY);
         isRemoving = false; // сброс
     }
+    player.setSelectedSlot(inventory.getSelectedSlot());
 }
 
 void Game::render(sf::RenderWindow& window) {

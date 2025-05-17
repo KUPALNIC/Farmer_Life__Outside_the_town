@@ -168,7 +168,7 @@ void World::render(sf::RenderWindow& window) {
             if (!biomeOpened[y][x]) {
                 sf::RectangleShape shadow(sf::Vector2f(cellSize, cellSize));
                 shadow.setPosition({static_cast<float>(x * cellSize), static_cast<float>(y * cellSize)});
-                shadow.setFillColor(sf::Color(0, 0, 0, 128)); // 128 = ~50% прозрачности
+                shadow.setFillColor(sf::Color(0, 0, 0, 128));
                 window.draw(shadow);
             }
 
@@ -176,6 +176,13 @@ void World::render(sf::RenderWindow& window) {
                 sf::Sprite bedSprite(bedTexture);
                 bedSprite.setPosition({static_cast<float>(x * cellSize), static_cast<float>(y * cellSize)});
                 window.draw(bedSprite);
+                if (bedWatered[y][x]) {
+                    sf::RectangleShape shadow(sf::Vector2f(cellSize, cellSize));
+                    shadow.setPosition({static_cast<float>(x * cellSize), static_cast<float>(y * cellSize)});
+                    shadow.setFillColor(sf::Color(0, 0, 0, 128));
+                    window.draw(shadow);
+                }
+
             }
         }
     }
