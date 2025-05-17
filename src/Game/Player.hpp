@@ -13,6 +13,8 @@ public:
     void render(sf::RenderWindow& window);
     sf::Vector2f getPosition() const;
 
+    Tool *getSelectedTool() const;
+
 private:
     World& world;
     sf::Vector2f position;
@@ -23,5 +25,6 @@ private:
     bool facingLeft;
 
     std::array<Tool*, 9> hotbar{};
+    const std::array<Tool*, 9>& getHotbar() const { return hotbar; }
     int selectedSlot;
 };

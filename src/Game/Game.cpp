@@ -50,6 +50,22 @@ void Game::handleInput(const sf::Event& event, const sf::RenderWindow& window) {
         //     // Отмена удаления, если не успели 2 сек
         //     isRemoving = false;
         // }
+        sf::Vector2i pixelPos(mouseEvent->position.x, mouseEvent->position.y);
+        sf::Vector2f worldPos = window.mapPixelToCoords(pixelPos);
+        int gridX = static_cast<int>(worldPos.x) / world.getCellSize();
+        int gridY = static_cast<int>(worldPos.y) / world.getCellSize();
+        Tool* tool = player.getSelectedTool();
+        if (tool) {
+            ToolType tt = tool->getType();
+            if (tt == ToolType::PLOW) {
+                if (world.getCellType(gridX, gridY) == CellType::EMPTY)
+                    world.interactWithCell(gridX, gridY, CellType::BED);
+            }
+            if (tt == ToolType::WATERING_CAN) {
+                if (world.getCellType(gridX, gridY) == CellType::BED)
+                    world.waterBed(gridX, gridY); // Новая функция, смотри ниже
+            }
+        }
     }
 
 }
@@ -69,5 +85,5 @@ void Game::render(sf::RenderWindow& window) {
     camera.apply(window);
     world.render(window);
     player.render(window);
-    inventory.render(window);
+    inventory.render(window, player.getHotbar());
 }

@@ -120,6 +120,11 @@ int World::getCellSize() const {
     return cellSize;
 }
 
+void World::waterBed(int x, int y) {
+    if (cellGrid[y][x] == CellType::BED)
+        bedWatered[y][x] = true;
+}
+
 void World::render(sf::RenderWindow& window) {
     // Координаты тайлов для гор
     static const std::vector<std::pair<int,int>> mountainTiles = {

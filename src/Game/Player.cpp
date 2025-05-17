@@ -15,6 +15,11 @@ Player::Player(World& worldRef) : world(worldRef),
     PlayerSprite.setOrigin({16.0f, 16.0f});
     PlayerSprite.setPosition(position);
     PlayerSprite.setScale({2.0f, 2.0f});
+    extern sf::Texture toolsTexture;
+    hotbar[0] = new Tool(Tool::Type::Axe, toolsTexture, sf::IntRect({0,0},{16,16}));
+    hotbar[1] = new Tool(Tool::Type::Hoe, toolsTexture, sf::IntRect({16,0},{16,16}));
+    hotbar[2] = new Tool(Tool::Type::WateringCan, toolsTexture, sf::IntRect({32,0},{16,16}));
+
 }
 
 void Player::update(float deltaTime) {
@@ -86,8 +91,22 @@ void Player::update(float deltaTime) {
 
 void Player::render(sf::RenderWindow& window) {
     window.draw(PlayerSprite);
+    // Если выбран инструмент — рисуем его поверх персонажа
+    Tool* tool = hotbar[selectedSlot];
+    if (tool && tool->getType() != ToolType::NONE) {
+        // Позиция инструмента относительно персонажа (например, чуть правее центра)
+        sf::Vector2f toolPos = position + sf::Vector2f(8, 0); // смещение подбери по вкусу
+        tool->render(window, toolPos, 0.5f); // инструменты мельче персонажа
+    }
 }
 
 sf::Vector2f Player::getPosition() const {
     return position;
 }
+
+Tool* Player::getSelectedTool() const {
+    if (selectedSlot >= 0 && selectedSlot < hotbar.size())
+        return hotbar[selectedSlot];
+    return nullptr;
+}
+
