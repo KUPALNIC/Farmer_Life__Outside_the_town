@@ -25,10 +25,17 @@ public:
     int getCellSize() const;
     void interactWithCell(int gridX, int gridY, CellType type);
     CellType getCellType(int gridX, int gridY) const;
+    Biome getBiomeAt(float x, float y) const; // Новое
+    bool isBiomeOpened(int gridX, int gridY) const; // Новое
+    void tryOpenBiome(Biome biome);
+
+    static constexpr int worldSize = 100;
+    static constexpr int cellSize = 32;
+
 
 private:
-    const int worldSize = 100;
-    const int cellSize = 32;
+    // const int worldSize = 100;
+    // const int cellSize = 32;
     std::array<std::array<Biome, 100>, 100> worldGrid;
     std::array<std::array<CellType, 100>, 100> cellGrid;
     std::array<std::array<sf::Color, 100>, 100> colorGrid;
@@ -38,6 +45,7 @@ private:
     std::array<std::array<int, 100>, 100> swampGrassIndex;
     std::array<std::array<int, 100>, 100> forestGrassIndex;
     std::array<std::array<int, 100>, 100> mountainGrassIndex;
+    std::array<std::array<bool, worldSize>, worldSize> biomeOpened;
 
     sf::RectangleShape cell;
     sf::Texture tilesetTexture;

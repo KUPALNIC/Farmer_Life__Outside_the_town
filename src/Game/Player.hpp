@@ -2,10 +2,11 @@
 #include <SFML/Graphics.hpp>
 #include <array>
 #include "/home/kupalnic/CLionProjects/Farmer Life: Outside the town/src/Objects/Tool.hpp"
+#include "World.hpp"
 
 class Player {
 public:
-    Player();
+    Player(World& worldRef);
 
     // void handleInput(sf::Event& event);
     void update(float deltaTime);
@@ -13,6 +14,7 @@ public:
     sf::Vector2f getPosition() const;
 
 private:
+    World& world;
     sf::Vector2f position;
     sf::Texture forwardTexture;
     sf::Texture backwardTexture;

@@ -1,7 +1,8 @@
 #include "Game.hpp"
 #include <iostream>
 
-Game::Game(): inventory(9, 64.f, {650,1000}) {
+Game::Game(): player(world),
+      inventory(9, 64.f, {650,1000}) {
     if (!font.openFromFile("assets/fonts/Delius/Delius-Regular.ttf")) {
         std::cerr << "Ошибка загрузки шрифта!" << std::endl;
     }

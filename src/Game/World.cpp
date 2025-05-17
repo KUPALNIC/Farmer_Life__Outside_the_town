@@ -20,6 +20,31 @@ World::World() {
             cellGrid[y][x] = CellType::EMPTY;
         }
     }
+    for (int y = 0; y < worldSize; ++y)
+        for (int x = 0; x < worldSize; ++x)
+            biomeOpened[y][x] = (worldGrid[y][x] == Biome::PLAINS);
+}
+
+bool World::isBiomeOpened(int gridX, int gridY) const {
+    if (gridX < 0 || gridX >= worldSize || gridY < 0 || gridY >= worldSize) return false;
+    return biomeOpened[gridY][gridX];
+}
+
+// Получить биом по мировой позиции
+Biome World::getBiomeAt(float x, float y) const {
+    int gridX = int(x) / cellSize;
+    int gridY = int(y) / cellSize;
+    if (gridX < 0 || gridX >= worldSize || gridY < 0 || gridY >= worldSize) return Biome::PLAINS;
+    return worldGrid[gridY][gridX];
+}
+
+// Заготовка для условия открытия биома
+void World::tryOpenBiome(Biome biome) {
+    // TODO: тут будет условие открытия
+    for (int y = 0; y < worldSize; ++y)
+        for (int x = 0; x < worldSize; ++x)
+            if (worldGrid[y][x] == biome)
+                biomeOpened[y][x] = true;
 }
 
 void World::generateBiome(int startX, int startY, int width, int height, Biome biome) {
@@ -135,6 +160,13 @@ void World::render(sf::RenderWindow& window) {
                 cell.setFillColor(colorGrid[y][x]);
                 window.draw(cell);
             }
+            if (!biomeOpened[y][x]) {
+                sf::RectangleShape shadow(sf::Vector2f(cellSize, cellSize));
+                shadow.setPosition({static_cast<float>(x * cellSize), static_cast<float>(y * cellSize)});
+                shadow.setFillColor(sf::Color(0, 0, 0, 128)); // 128 = ~50% прозрачности
+                window.draw(shadow);
+            }
+
             if (cellGrid[y][x] == CellType::BED) {
                 sf::Sprite bedSprite(bedTexture);
                 bedSprite.setPosition({static_cast<float>(x * cellSize), static_cast<float>(y * cellSize)});

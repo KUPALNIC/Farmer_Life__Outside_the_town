@@ -1,14 +1,15 @@
 #include "Player.hpp"
 
-Player::Player() :
-    position(400.0f, 300.0f),
-    currentFrame(0.0f),
-    facingLeft(false),
-PlayerSprite(forwardTexture),
-    selectedSlot(0)
-{
-    forwardTexture.loadFromFile("/home/kupalnic/CLionProjects/Farmer Life: Outside the town/assets/textures/forward.png");
-    backwardTexture.loadFromFile("/home/kupalnic/CLionProjects/Farmer Life: Outside the town/assets/textures/backward.png");
+Player::Player(World& worldRef) : world(worldRef),
+                   position(400.0f, 300.0f),
+                   currentFrame(0.0f),
+                   facingLeft(false),
+                   PlayerSprite(forwardTexture),
+                   selectedSlot(0) {
+    forwardTexture.loadFromFile(
+        "/home/kupalnic/CLionProjects/Farmer Life: Outside the town/assets/textures/forward.png");
+    backwardTexture.loadFromFile(
+        "/home/kupalnic/CLionProjects/Farmer Life: Outside the town/assets/textures/backward.png");
     PlayerSprite.setTexture(forwardTexture);
     PlayerSprite.setTextureRect(sf::IntRect({0, 0}, {32, 32}));
     PlayerSprite.setOrigin({16.0f, 16.0f});
@@ -61,9 +62,21 @@ void Player::update(float deltaTime) {
     }
 
     // Update position
-    position += movement;
-    PlayerSprite.setPosition(position);
+    sf::Vector2f newPosition = position + movement;
+    PlayerSprite.setPosition(newPosition);
+    // Ограничение по границе карты:
+    newPosition.x = std::max(0.f, std::min(newPosition.x, this->world.worldSize * this->world.cellSize - 1.f));
+    newPosition.y = std::max(0.f, std::min(newPosition.y, this->world.worldSize * this->world.cellSize - 1.f));
 
+    // Ограничение по открытому биому:
+    Biome newBiome = this->world.getBiomeAt(newPosition.x, newPosition.y);
+    int gridX = int(newPosition.x) / this->world.cellSize;
+    int gridY = int(newPosition.y) / this->world.cellSize;
+    if (this->world.isBiomeOpened(gridX, gridY)) {
+        position = newPosition;
+        PlayerSprite.setPosition(position);
+    }
+    // иначе — стоим на месте
     // If not moving, reset to idle frame
     if (!isMoving) {
         currentFrame = 0;
