@@ -14,7 +14,7 @@ int main() {
     font.openFromFile("../assets/fonts/Cherry_Bomb_One/CherryBombOne-Regular.ttf");
 
     sf::Texture mainMenuBg;
-    mainMenuBg.loadFromFile("../assets/menu/main_bg.jpg"); // ваша картинка
+    mainMenuBg.loadFromFile("../assets/textures/sky.png");
 
     GameState state = GameState::MainMenu;
     Game game;
@@ -24,7 +24,7 @@ int main() {
     mainMenu.setCallbacks(
         // onNewGame
         [&]() {
-            game = Game();
+            game.reset();
             state = GameState::Playing;
             mainMenu.hide();
         },
@@ -53,34 +53,43 @@ int main() {
 
     mainMenu.show();
 
-    while (window.isOpen()) {
-        while (const std::optional<sf::Event> event = window.pollEvent()) {
-            if (event->is<sf::Event::Closed>()) {
+    while (window.isOpen() && state != GameState::Exit) {
+        while (auto eventOpt = window.pollEvent()) {
+            const sf::Event& event = *eventOpt;
+            if (event.is<sf::Event::Closed>()) {
                 window.close();
             } else {
-                game.handleInput(*event, window);
-            }
-            if (state == GameState::MainMenu) {
-                mainMenu.handleEvent(event, window);
-            } else if (state == GameState::Playing) {
-                // Открыть паузу по Esc
-                auto keyEvent = event->getIf<sf::Event::KeyPressed>();
+                game.handleInput(event, window);
+                if (state == GameState::MainMenu) {
+                    mainMenu.handleEvent(event, window);
+                } else if (state == GameState::Playing) {
+                auto keyEvent = event.getIf<sf::Event::KeyPressed>();
                 int scancodeValue = static_cast<int>(keyEvent->scancode);
                 int escapeValue = static_cast<int>(sf::Keyboard::Scancode::Escape);
-                if (event->is<sf::Event::KeyPressed> &&  scancodeValue == escapeValue) {
+                if (keyEvent &&  scancodeValue == escapeValue) {
                     state = GameState::Paused;
                     pauseMenu.show();
                 } else {
                     game.handleInput(event, window);
                 }
-            } else if (state == GameState::Paused) {
-                pauseMenu.handleEvent(event, window);
+                } else if (state == GameState::Paused) {
+                    pauseMenu.handleEvent(event, window);
+                }
             }
+
         }
 
         game.update();
         window.clear();
-        game.render(window);
+        if (state == GameState::MainMenu) {
+            mainMenu.render(window);
+        } else if (state == GameState::Playing) {
+            game.update();
+            game.render(window);
+        } else if (state == GameState::Paused) {
+            game.render(window);
+            pauseMenu.render(window);
+        }
         window.display();
     }
 
