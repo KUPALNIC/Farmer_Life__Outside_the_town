@@ -70,6 +70,7 @@ void Game::handleInput(const sf::Event& event, const sf::RenderWindow& window) {
                             }
                         }
                     }
+                    world.dryBed(gridX, gridY);
                     return;
                 }
             }
@@ -109,11 +110,12 @@ sf::Texture cropTexture;
 void Game::render(sf::RenderWindow& window) {
     camera.apply(window);
     world.render(window);
+    world.renderBeds(window, cropTexture);
     player.render(window);
     if (!cropTexture.loadFromFile("../assets/textures/crop.png")) {
         std::cerr << "Failed to load crop.png!" << std::endl;
     }
     cropTexture.loadFromFile("../assets/textures/crop.png");
     inventory.render(window, player.getHotbar(), cropTexture);
-    world.renderBeds(window, cropTexture);
+
 }

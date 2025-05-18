@@ -14,15 +14,7 @@ public:
     void render(sf::RenderWindow& window, const std::array<Tool*, 9>& hotbar, sf::Texture& cropTexture);
     void updatePosition(const sf::Vector2u& windowSize);
     int getSelectedSlot() const;
-    CropType getCropInSlot(int slot) const{
-        switch (slot) {
-            case 3: return CropType::Wheat;
-            case 4: return CropType::Carrot;
-            case 5: return CropType::Potato;
-            case 6: return CropType::Tomato;
-            default: return CropType::None;
-        }
-    }
+    CropType getCropInSlot(int slot) const;
     // Работа с культурами
     void addCrop(CropType type, int amount = 1);
     bool removeCrop(CropType type, int amount = 1);
@@ -39,6 +31,7 @@ private:
 
     // Культуры
     std::map<CropType, int> cropItems;
+    std::vector<CropType> cropOrder; // порядок появления культур
 
     // Приватный метод для рендера культур
     void renderCrops(sf::RenderWindow& window, sf::Texture& cropTexture);

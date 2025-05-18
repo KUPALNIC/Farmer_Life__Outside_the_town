@@ -113,6 +113,10 @@ void World::waterBed(int x, int y) {
         it->second.water();
     }
 }
+void World::dryBed(int x, int y) {
+    if (cellGrid[y][x] == CellType::BED)
+        bedWatered[y][x] = false;
+}
 bool World::isWatered(int x, int y) {
     if (cellGrid[y][x] == CellType::BED && bedWatered[y][x]) return true;
     auto it = beds.find({x, y});

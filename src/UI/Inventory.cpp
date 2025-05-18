@@ -1,5 +1,6 @@
 #include "Inventory.hpp"
 #include "../Objects/Tool.hpp"
+#include <algorithm>
 
 Inventory::Inventory(int slots, float slotSize, const sf::Vector2f& position)
     : totalSlots(slots), slotSize(slotSize), position(position), selectedSlot(0) {
@@ -17,14 +18,22 @@ Inventory::Inventory(int slots, float slotSize, const sf::Vector2f& position)
     addCrop(CropType::Tomato, 1);
 }
 void Inventory::addCrop(CropType type, int amount) {
-    if (type != CropType::None)
+    if (type != CropType::None) {
+        bool wasAbsent = (cropItems[type] == 0);
         cropItems[type] += amount;
+        if (wasAbsent && cropItems[type] > 0)
+            cropOrder.push_back(type);
+    }
 }
 
 bool Inventory::removeCrop(CropType type, int amount) {
     if (type == CropType::None) return false;
     if (cropItems[type] >= amount) {
         cropItems[type] -= amount;
+        if (cropItems[type] == 0) {
+            // удалить из cropOrder
+            cropOrder.erase(std::remove(cropOrder.begin(), cropOrder.end(), type), cropOrder.end());
+        }
         return true;
     }
     return false;
@@ -41,14 +50,14 @@ std::map<CropType, int> Inventory::getAllCrops() const {
 
 void Inventory::renderCrops(sf::RenderWindow& window, sf::Texture& cropTexture) {
     int slotIndex = 3; // культуры начинаются с 4 слота (индекс 3)
-    for (const auto& [type, count] : cropItems) {
+    for (CropType type : cropOrder) {
+        int count = getCropCount(type);
         if (type == CropType::None || count <= 0) continue;
-        if (slotIndex >= 7) break; // только 4 слота под культуры
+        if (slotIndex >=9) break;
 
         sf::Vector2f slotPos = slots[slotIndex].getPosition();
         int cropRow = static_cast<int>(type) - 1;
         sf::Sprite icon(cropTexture);
-        icon.setTexture(cropTexture);
         icon.setTextureRect(sf::IntRect({0, cropRow * 32}, {32, 32}));
         icon.setScale({slotSize / 32.f, slotSize / 32.f});
         icon.setPosition(slotPos);
@@ -130,12 +139,12 @@ int Inventory::getSelectedSlot() const {
     return selectedSlot;
 }
 
-// CropType getCropInSlot(int slot) {
-//     switch (slot) {
-//         case 3: return CropType::Wheat;
-//         case 4: return CropType::Carrot;
-//         case 5: return CropType::Potato;
-//         case 6: return CropType::Tomato;
-//         default: return CropType::None;
-//     }
-// }
+CropType Inventory::getCropInSlot(int slot) const {
+    if (slot < 3 || slot > 8) return CropType::None;
+
+    int cropIndex = slot - 3;
+    if (cropIndex < static_cast<int>(cropOrder.size())) {
+        return cropOrder[cropIndex];
+    }
+    return CropType::None;
+}

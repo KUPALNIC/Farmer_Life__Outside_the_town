@@ -26,6 +26,9 @@ public:
     void render(sf::RenderWindow& window);
     int getCellSize() const;
     void waterBed(int x, int y);
+
+    void dryBed(int x, int y);
+
     bool isWatered(int x, int y);
     void interactWithCell(int gridX, int gridY, CellType type);
     CellType getCellType(int gridX, int gridY) const;
