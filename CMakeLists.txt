@@ -27,7 +27,8 @@ add_executable(Farmer_Life__Outside_the_town
         src/Objects/Tool.cpp
         src/Objects/Tool.hpp
         src/UI/Inventory.cpp
-        src/UI/Inventory.h)
+        src/UI/Inventory.hpp
+)
 
 find_package(SFML 3.0 COMPONENTS System Window Graphics REQUIRED)
 target_link_libraries(Farmer_Life__Outside_the_town sfml-graphics sfml-window sfml-system)

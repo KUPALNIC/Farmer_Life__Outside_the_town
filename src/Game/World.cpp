@@ -3,23 +3,22 @@
 
 World::World() {
     int halfSize = worldSize / 2;
-
     tilesetTexture.loadFromFile("/home/kupalnic/CLionProjects/Farmer Life: Outside the town/assets/textures/floortileset.png");
     bedTexture.loadFromFile("/home/kupalnic/CLionProjects/Farmer Life: Outside the town/assets/textures/bed.jpg");
     HouseTexture.loadFromFile("/home/kupalnic/CLionProjects/Farmer Life: Outside the town/assets/textures/House.png");
-
     generateBiome(0, 0, halfSize, halfSize, Biome::PLAINS);
     generateBiome(0, halfSize, halfSize, halfSize, Biome::SWAMP);
     generateBiome(halfSize, halfSize, halfSize, halfSize, Biome::FOREST);
     generateBiome(halfSize, 0, halfSize, halfSize, Biome::MOUNTAINS);
-
     cell.setSize(sf::Vector2f(static_cast<float>(cellSize), static_cast<float>(cellSize)));
-
     for (int y = 0; y < worldSize; ++y) {
         for (int x = 0; x < worldSize; ++x) {
             cellGrid[y][x] = CellType::EMPTY;
         }
     }
+    for (int y = 0; y < worldSize; ++y)
+        for (int x = 0; x < worldSize; ++x)
+            bedWatered[y][x] = false;
     for (int y = 0; y < worldSize; ++y)
         for (int x = 0; x < worldSize; ++x)
             biomeOpened[y][x] = (worldGrid[y][x] == Biome::PLAINS);
@@ -126,7 +125,6 @@ void World::waterBed(int x, int y) {
 }
 
 void World::render(sf::RenderWindow& window) {
-    // Координаты тайлов для гор
     static const std::vector<std::pair<int,int>> mountainTiles = {
         {0,0}, {1,0}, {2,0}, {3,0}, {4,0},
         {0,1}, {2,1}, {3,1}, {4,1}

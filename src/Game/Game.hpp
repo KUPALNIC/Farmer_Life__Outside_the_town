@@ -11,7 +11,6 @@ class Game {
 public:
     Game();
     ~Game();
-
     void handleInput(const sf::Event& event, const sf::RenderWindow& window);
     void update();
     void render(sf::RenderWindow& window);
