@@ -18,6 +18,8 @@ public:
     void render(sf::RenderWindow& window);
     void notifyUser(const std::string& text);
 
+    void showTraderPhrase(const std::string &phrase, float duration);
+
 private:
     Player player;
     Camera camera;
@@ -34,4 +36,7 @@ private:
     sf::Texture cropTexture;
     std::string notificationText;
     sf::Clock notificationClock;
+    std::string traderPhrase;
+    sf::Clock traderPhraseClock;
+    float traderPhraseDuration = 0.0f;
 };
