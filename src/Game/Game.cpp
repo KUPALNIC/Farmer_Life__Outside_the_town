@@ -2,6 +2,7 @@
 #include <iostream>
 #include <cmath>
 
+
 constexpr float TRADER_OPEN_DIST = 90.f;
 constexpr float TRADER_CLOSE_DIST = 180.f;
 const std::string TRADER_HELLO = "Best deals in the village!";
@@ -18,6 +19,19 @@ Game::Game()
 }
 
 Game::~Game() {}
+
+void Game::reset() {
+    world = World();
+    player = Player(world);
+    inventory = Inventory(9, 64.f, {650,1000});
+    camera = Camera();
+    trader = Trader({80.f, 80.f});
+    tradeWindow = TradeWindow();
+    tradeWindow.setNotifyCallback([this](const std::string& msg) { notifyUser(msg); });
+    notificationText.clear();
+    traderPhrase.clear();
+    traderPhraseDuration = 0.0f;
+}
 
 void Game::notifyUser(const std::string& text) {
     notificationText = text;

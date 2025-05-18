@@ -8,11 +8,15 @@
 #include <SFML/System/Clock.hpp>
 #include "Trader.hpp"
 #include "TradeWindow.hpp"
+#include <optional>
 
 class Game {
 public:
     Game();
     ~Game();
+
+    void reset();
+
     void handleInput(const sf::Event& event, const sf::RenderWindow& window);
     void update();
     void render(sf::RenderWindow& window);
@@ -21,9 +25,9 @@ public:
     void showTraderPhrase(const std::string &phrase, float duration);
 
 private:
-    Player player;
-    Camera camera;
-    World world;
+    std::optional<World> world;
+    std::optional<Player> player;
+    std::optional<Camera> camera;
     Inventory inventory;
     sf::Font font;
     bool isRemoving = false;           // флаг: сейчас держим ПКМ
@@ -39,4 +43,5 @@ private:
     std::string traderPhrase;
     sf::Clock traderPhraseClock;
     float traderPhraseDuration = 0.0f;
+
 };

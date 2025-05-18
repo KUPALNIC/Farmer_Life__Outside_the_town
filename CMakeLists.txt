@@ -32,6 +32,12 @@ add_executable(Farmer_Life__Outside_the_town
         src/Game/Trader.hpp
         src/Game/TradeWindow.cpp
         src/Game/TradeWindow.hpp
+        src/UI/Menu.cpp
+        src/UI/Menu.hpp
+        src/UI/MainMenu.cpp
+        src/UI/MainMenu.hpp
+        src/UI/PauseMenu.cpp
+        src/UI/PauseMenu.hpp
 )
 
 find_package(SFML 3.0 COMPONENTS System Window Graphics REQUIRED)
