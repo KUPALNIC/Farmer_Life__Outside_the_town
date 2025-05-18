@@ -14,14 +14,15 @@ World::World() {
     for (int y = 0; y < worldSize; ++y) {
         for (int x = 0; x < worldSize; ++x) {
             cellGrid[y][x] = CellType::EMPTY;
+            bedWatered[y][x] = false;
+            biomeOpened[y][x] = (worldGrid[y][x] == Biome::PLAINS);
+            bedGrid[y][x] = BedGrid::NONE;
         }
     }
-    for (int y = 0; y < worldSize; ++y)
-        for (int x = 0; x < worldSize; ++x)
-            bedWatered[y][x] = false;
-    for (int y = 0; y < worldSize; ++y)
-        for (int x = 0; x < worldSize; ++x)
-            biomeOpened[y][x] = (worldGrid[y][x] == Biome::PLAINS);
+
+}
+void World::makeBed(int x, int y) {
+    bedGrid[y][x] = BedGrid::BED;
 }
 
 bool World::isBiomeOpened(int gridX, int gridY) const {
@@ -123,6 +124,9 @@ void World::waterBed(int x, int y) {
     if (cellGrid[y][x] == CellType::BED)
         bedWatered[y][x] = true;
 }
+bool World::isWatered(int x, int y) {
+    if (cellGrid[y][x] == CellType::BED && bedWatered[y][x]) return true;
+}
 
 void World::render(sf::RenderWindow& window) {
     static const std::vector<std::pair<int,int>> mountainTiles = {
@@ -209,3 +213,5 @@ CellType World::getCellType(int gridX, int gridY) const {
     if (gridX < 0 || gridX >= worldSize || gridY < 0 || gridY >= worldSize) return CellType::EMPTY;
     return cellGrid[gridY][gridX];
 }
+
+

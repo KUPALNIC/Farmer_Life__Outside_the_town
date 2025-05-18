@@ -2,6 +2,8 @@
 #include <SFML/Graphics.hpp>
 #include <array>
 #include <random>
+#include <vector>
+#include "../Objects/Bed.hpp"
 
 enum class Biome {
     PLAINS,
@@ -15,22 +17,25 @@ enum class CellType {
     BED,
     TREE
 };
+enum class BedGrid {NONE, BED};
 
 class World {
 public:
     World();
 
+    void makeBed(int x, int y);
+
     void update(float deltaTime);
     void render(sf::RenderWindow& window);
     int getCellSize() const;
-
     void waterBed(int x, int y);
-
+    bool isWatered(int x, int y);
     void interactWithCell(int gridX, int gridY, CellType type);
     CellType getCellType(int gridX, int gridY) const;
-    Biome getBiomeAt(float x, float y) const; // Новое
-    bool isBiomeOpened(int gridX, int gridY) const; // Новое
+    Biome getBiomeAt(float x, float y) const;
+    bool isBiomeOpened(int gridX, int gridY) const;
     void tryOpenBiome(Biome biome);
+
 
     static constexpr int worldSize = 100;
     static constexpr int cellSize = 32;
@@ -49,8 +54,9 @@ private:
     std::array<std::array<int, 100>, 100> forestGrassIndex;
     std::array<std::array<int, 100>, 100> mountainGrassIndex;
     std::array<std::array<bool, worldSize>, worldSize> biomeOpened;
-
-    std::array<std::array<bool, worldSize>, worldSize> bedWatered; // массив "полита грядка"
+    std::array<std::array<bool, worldSize>, worldSize> bedWatered;
+    std::array<std::array<BedGrid, worldSize>, worldSize> bedGrid;
+    std::vector<Bed> bed;
 
     sf::RectangleShape cell;
     sf::Texture tilesetTexture;

@@ -11,6 +11,70 @@ Inventory::Inventory(int slots, float slotSize, const sf::Vector2f& position)
         slot.setOutlineThickness(2.0f);
         this->slots.push_back(slot);
     }
+    addCrop(CropType::Wheat, 1);
+    addCrop(CropType::Carrot, 1);
+    addCrop(CropType::Potato, 1);
+    addCrop(CropType::Tomato, 1);
+}
+void Inventory::addCrop(CropType type, int amount) {
+    if (type != CropType::None)
+        cropItems[type] += amount;
+}
+
+bool Inventory::removeCrop(CropType type, int amount) {
+    if (type == CropType::None) return false;
+    if (cropItems[type] >= amount) {
+        cropItems[type] -= amount;
+        return true;
+    }
+    return false;
+}
+
+int Inventory::getCropCount(CropType type) const {
+    auto it = cropItems.find(type);
+    return it != cropItems.end() ? it->second : 0;
+}
+
+std::map<CropType, int> Inventory::getAllCrops() const {
+    return cropItems;
+}
+
+void Inventory::renderCrops(sf::RenderWindow& window, sf::Texture& cropTexture) {
+    // Для каждой ячейки инвентаря (slots) — если там культура, рисуем иконку и количество
+    int i = 0;
+    for (const auto& [type, count] : cropItems) {
+        if (type == CropType::None || count <= 0) continue;
+        if (i >= slots.size()) break;
+
+        // Координаты слота
+        sf::Vector2f slotPos = slots[i].getPosition();
+
+        // Иконка культуры
+        int cropRow = static_cast<int>(type) - 1;
+        sf::Texture Texture;
+        sf::Sprite icon(Texture);
+        icon.setTexture(cropTexture);
+        icon.setTextureRect(sf::IntRect({0, cropRow * 32}, {32, 32})); // колонка 0 = собранная культура
+        icon.setScale({slotSize / 32.f, slotSize / 32.f});
+        icon.setPosition(slotPos);
+        window.draw(icon);
+
+        // Количество — в правом верхнем углу
+        static sf::Font font;
+        static bool isFontLoaded = false;
+        if (!isFontLoaded) {
+            font.openFromFile("assets/fonts/Delius/Delius-Regular.ttf");
+            isFontLoaded = true;
+        }
+        sf::Text txt(font, std::to_string(count), 15);
+        txt.setFillColor(sf::Color::White);
+        txt.setOutlineColor(sf::Color::Black);
+        txt.setOutlineThickness(2.f);
+        txt.setPosition({slotPos.x + slotSize - 18, slotPos.y + 2}); // правый верхний угол
+        window.draw(txt);
+
+        ++i;
+    }
 }
 
 void Inventory::handleInput(const sf::Event& event) {
@@ -41,10 +105,10 @@ void Inventory::updatePosition(const sf::Vector2u& windowSize) {
     }
 }
 
-void Inventory::render(sf::RenderWindow& window, const std::array<Tool*, 9>& hotbar) {
+void Inventory::render(sf::RenderWindow& window, const std::array<Tool*, 9>& hotbar, sf::Texture& cropTexture) {
     sf::View originalView = window.getView();
     window.setView(window.getDefaultView());
-
+    renderCrops(window, cropTexture);
     for (size_t i = 0; i < slots.size(); ++i) {
         if (i == selectedSlot) {
             slots[i].setOutlineColor(sf::Color::Yellow);
@@ -69,4 +133,14 @@ void Inventory::render(sf::RenderWindow& window, const std::array<Tool*, 9>& hot
 
 int Inventory::getSelectedSlot() const {
     return selectedSlot;
+}
+
+CropType getCropInSlot(int slot) {
+    switch (slot) {
+        case 3: return CropType::Wheat;
+        case 4: return CropType::Carrot;
+        case 5: return CropType::Potato;
+        case 6: return CropType::Tomato;
+        default: return CropType::None;
+    }
 }
