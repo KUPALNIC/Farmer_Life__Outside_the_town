@@ -40,26 +40,21 @@ std::map<CropType, int> Inventory::getAllCrops() const {
 }
 
 void Inventory::renderCrops(sf::RenderWindow& window, sf::Texture& cropTexture) {
-    // Для каждой ячейки инвентаря (slots) — если там культура, рисуем иконку и количество
-    int i = 0;
+    int slotIndex = 3; // культуры начинаются с 4 слота (индекс 3)
     for (const auto& [type, count] : cropItems) {
         if (type == CropType::None || count <= 0) continue;
-        if (i >= slots.size()) break;
+        if (slotIndex >= 7) break; // только 4 слота под культуры
 
-        // Координаты слота
-        sf::Vector2f slotPos = slots[i].getPosition();
-
-        // Иконка культуры
+        sf::Vector2f slotPos = slots[slotIndex].getPosition();
         int cropRow = static_cast<int>(type) - 1;
-        sf::Texture Texture;
-        sf::Sprite icon(Texture);
+        sf::Sprite icon(cropTexture);
         icon.setTexture(cropTexture);
-        icon.setTextureRect(sf::IntRect({0, cropRow * 32}, {32, 32})); // колонка 0 = собранная культура
+        icon.setTextureRect(sf::IntRect({0, cropRow * 32}, {32, 32}));
         icon.setScale({slotSize / 32.f, slotSize / 32.f});
         icon.setPosition(slotPos);
         window.draw(icon);
 
-        // Количество — в правом верхнем углу
+        // Количество
         static sf::Font font;
         static bool isFontLoaded = false;
         if (!isFontLoaded) {
@@ -70,10 +65,10 @@ void Inventory::renderCrops(sf::RenderWindow& window, sf::Texture& cropTexture) 
         txt.setFillColor(sf::Color::White);
         txt.setOutlineColor(sf::Color::Black);
         txt.setOutlineThickness(2.f);
-        txt.setPosition({slotPos.x + slotSize - 18, slotPos.y + 2}); // правый верхний угол
+        txt.setPosition({slotPos.x + slotSize - 18, slotPos.y + 2});
         window.draw(txt);
 
-        ++i;
+        ++slotIndex;
     }
 }
 

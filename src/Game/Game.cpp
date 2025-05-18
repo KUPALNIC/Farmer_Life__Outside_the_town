@@ -96,20 +96,24 @@ void Game::update() {
     player.update(deltaTime);
     world.update(deltaTime);
     camera.update(deltaTime, player.getPosition());
-    if (isRemoving && removeClock.getElapsedTime().asSeconds() >= 2.0f) {
+    if (isRemoving && removeClock.getElapsedTime().asSeconds() >2.0f) {
         world.interactWithCell(removeGridX, removeGridY, CellType::EMPTY);
         isRemoving = false; // сброс
     }
     player.setSelectedSlot(inventory.getSelectedSlot());
+    world.updateBeds(deltaTime);
 }
 
-
+sf::Texture cropTexture;
 
 void Game::render(sf::RenderWindow& window) {
     camera.apply(window);
     world.render(window);
     player.render(window);
-    sf::Texture cropTexture;
-    cropTexture.loadFromFile("/home/kupalnic/CLionProjects/Farmer Life: Outside the town/cmake-build-debug/assets/textures/crop.png");
+    if (!cropTexture.loadFromFile("../assets/textures/crop.png")) {
+        std::cerr << "Failed to load crop.png!" << std::endl;
+    }
+    cropTexture.loadFromFile("../assets/textures/crop.png");
     inventory.render(window, player.getHotbar(), cropTexture);
+    world.renderBeds(window, cropTexture);
 }

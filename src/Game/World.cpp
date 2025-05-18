@@ -98,20 +98,7 @@ sf::Color World::getRandomBiomeColor(Biome biome) {
 }
 
 void World::update(float deltaTime) {
-    for (int y = 0; y < worldSize; ++y) {
-        for (int x = 0; x < worldSize; ++x) {
-            switch (cellGrid[y][x]) {
-                case CellType::BED:
-                    colorGrid[y][x] = sf::Color::Magenta;
-                break;
-                case CellType::TREE:
-                    colorGrid[y][x] = sf::Color::Blue;
-                break;
-                default:
-                break;
-            }
-        }
-    }
+
 }
 
 int World::getCellSize() const {
@@ -189,6 +176,7 @@ void World::render(sf::RenderWindow& window) {
                     shadow.setPosition({static_cast<float>(x * cellSize), static_cast<float>(y * cellSize)});
                     shadow.setFillColor(sf::Color(0, 0, 0, 128));
                     window.draw(shadow);
+
                 }
 
             }
@@ -233,4 +221,15 @@ Bed* World::getBedAt(int x, int y) {
     return (it != beds.end()) ? &it->second : nullptr;
 }
 
+void World::updateBeds(float dt) {
+    for (auto& [pos, bed] : beds) {
+        bed.update(dt);
+    }
+}
 
+void World::renderBeds(sf::RenderWindow& window, sf::Texture& cropTexture) {
+    for (const auto& [pos, bed] : beds) {
+        sf::Vector2f pixelPos(pos.first * 32.0f, pos.second * 32.0f); // если размер клетки 32
+        bed.render(window, cropTexture, pixelPos);
+    }
+}

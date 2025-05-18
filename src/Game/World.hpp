@@ -35,6 +35,8 @@ public:
     void createBed(int x, int y);
     void removeBed(int x, int y);
     Bed* getBedAt(int x, int y);
+    void updateBeds(float dt);
+    void renderBeds(sf::RenderWindow& window, sf::Texture& cropTexture);
 
     static constexpr int worldSize = 100;
     static constexpr int cellSize = 32;
