@@ -2,7 +2,7 @@
 #include <SFML/Graphics.hpp>
 #include <array>
 #include <random>
-#include <vector>
+#include <map>
 #include "../Objects/Bed.hpp"
 
 enum class Biome {
@@ -22,9 +22,6 @@ enum class BedGrid {NONE, BED};
 class World {
 public:
     World();
-
-    void makeBed(int x, int y);
-
     void update(float deltaTime);
     void render(sf::RenderWindow& window);
     int getCellSize() const;
@@ -35,7 +32,9 @@ public:
     Biome getBiomeAt(float x, float y) const;
     bool isBiomeOpened(int gridX, int gridY) const;
     void tryOpenBiome(Biome biome);
-
+    void createBed(int x, int y);
+    void removeBed(int x, int y);
+    Bed* getBedAt(int x, int y);
 
     static constexpr int worldSize = 100;
     static constexpr int cellSize = 32;
@@ -56,7 +55,7 @@ private:
     std::array<std::array<bool, worldSize>, worldSize> biomeOpened;
     std::array<std::array<bool, worldSize>, worldSize> bedWatered;
     std::array<std::array<BedGrid, worldSize>, worldSize> bedGrid;
-    std::vector<Bed> bed;
+    std::map<std::pair<int, int>, Bed> beds;
 
     sf::RectangleShape cell;
     sf::Texture tilesetTexture;

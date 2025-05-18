@@ -6,7 +6,7 @@ enum class CropType { None, Wheat, Carrot, Potato, Tomato };
 
 class Bed {
 public:
-    Bed();
+    Bed() = default;
 
     bool isWatered() const { return watered; }
     bool isOccupied() const { return occupied; }

@@ -3,9 +3,9 @@
 
 World::World() {
     int halfSize = worldSize / 2;
-    tilesetTexture.loadFromFile("/home/kupalnic/CLionProjects/Farmer Life: Outside the town/assets/textures/floortileset.png");
-    bedTexture.loadFromFile("/home/kupalnic/CLionProjects/Farmer Life: Outside the town/assets/textures/bed.jpg");
-    HouseTexture.loadFromFile("/home/kupalnic/CLionProjects/Farmer Life: Outside the town/assets/textures/House.png");
+    tilesetTexture.loadFromFile("../assets/textures/floortileset.png");
+    bedTexture.loadFromFile("../assets/textures/bed.jpg");
+    HouseTexture.loadFromFile("../assets/textures/House.png");
     generateBiome(0, 0, halfSize, halfSize, Biome::PLAINS);
     generateBiome(0, halfSize, halfSize, halfSize, Biome::SWAMP);
     generateBiome(halfSize, halfSize, halfSize, halfSize, Biome::FOREST);
@@ -21,9 +21,7 @@ World::World() {
     }
 
 }
-void World::makeBed(int x, int y) {
-    bedGrid[y][x] = BedGrid::BED;
-}
+
 
 bool World::isBiomeOpened(int gridX, int gridY) const {
     if (gridX < 0 || gridX >= worldSize || gridY < 0 || gridY >= worldSize) return false;
@@ -123,9 +121,17 @@ int World::getCellSize() const {
 void World::waterBed(int x, int y) {
     if (cellGrid[y][x] == CellType::BED)
         bedWatered[y][x] = true;
+    auto it = beds.find({x, y});
+    if (it != beds.end()) {
+        it->second.water();
+    }
 }
 bool World::isWatered(int x, int y) {
     if (cellGrid[y][x] == CellType::BED && bedWatered[y][x]) return true;
+    auto it = beds.find({x, y});
+    if (it != beds.end()) {
+        return it->second.isWatered();
+    }
 }
 
 void World::render(sf::RenderWindow& window) {
@@ -212,6 +218,19 @@ void World::interactWithCell(int gridX, int gridY, CellType type) {
 CellType World::getCellType(int gridX, int gridY) const {
     if (gridX < 0 || gridX >= worldSize || gridY < 0 || gridY >= worldSize) return CellType::EMPTY;
     return cellGrid[gridY][gridX];
+}
+
+void World::createBed(int x, int y) {
+    beds[{x, y}] = Bed();
+}
+
+void World::removeBed(int x, int y) {
+    beds.erase({x, y});
+}
+
+Bed* World::getBedAt(int x, int y) {
+    auto it = beds.find({x, y});
+    return (it != beds.end()) ? &it->second : nullptr;
 }
 
 

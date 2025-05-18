@@ -1,6 +1,6 @@
 #include "Bed.hpp"
 
-Bed::Bed() {}
+// Bed::Bed() {}
 
 bool Bed::plantCrop(CropType type) {
     if (occupied || !watered || type == CropType::None)

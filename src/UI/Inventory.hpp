@@ -14,7 +14,15 @@ public:
     void render(sf::RenderWindow& window, const std::array<Tool*, 9>& hotbar, sf::Texture& cropTexture);
     void updatePosition(const sf::Vector2u& windowSize);
     int getSelectedSlot() const;
-    CropType getCropInSlot(int slot) const {}
+    CropType getCropInSlot(int slot) const{
+        switch (slot) {
+            case 3: return CropType::Wheat;
+            case 4: return CropType::Carrot;
+            case 5: return CropType::Potato;
+            case 6: return CropType::Tomato;
+            default: return CropType::None;
+        }
+    }
     // Работа с культурами
     void addCrop(CropType type, int amount = 1);
     bool removeCrop(CropType type, int amount = 1);

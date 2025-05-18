@@ -3,7 +3,7 @@
 
 Game::Game(): player(world),
       inventory(9, 64.f, {650,1000}){
-    if (!font.openFromFile("assets/fonts/Delius/Delius-Regular.ttf")) {
+    if (!font.openFromFile("../assets/fonts/Delius/Delius-Regular.ttf")) {
         std::cerr << "Ошибка загрузки шрифта!" << std::endl;
     }
 }
@@ -24,6 +24,7 @@ void Game::handleInput(const sf::Event& event, const sf::RenderWindow& window) {
             removeGridY = static_cast<int>(worldPos.y) / world.getCellSize();
             isRemoving = true;
             removeClock.restart();
+            world.removeBed(removeGridX, removeGridY);
         }
 
         if (mouseEvent->button == sf::Mouse::Button::Left) {
@@ -48,19 +49,20 @@ void Game::handleInput(const sf::Event& event, const sf::RenderWindow& window) {
                 if (tt == Tool::Type::Hoe) {
                     if (world.getCellType(gridX, gridY) == CellType::EMPTY)
                         world.interactWithCell(gridX, gridY, CellType::BED);
-                        world.makeBed(gridX, gridY);
+                        world.createBed(gridX, gridY);
                     return;
                 }
                 // Лейка — поливаем грядку
                 if (tt == Tool::Type::WateringCan) {
                     if (world.getCellType(gridX, gridY) == CellType::BED)
                         world.waterBed(gridX, gridY);
+
                     return;
                 }
                 // Топор — сбор урожая
                 if (tt == Tool::Type::Axe) {
                     if (world.getCellType(gridX, gridY) == CellType::BED) {
-                        Bed* bed =
+                        Bed* bed = world.getBedAt(gridX, gridY);
                         if (bed && bed->isReadyToHarvest()) {
                             CropType harvested = bed->harvest();
                             if (harvested != CropType::None) {
@@ -101,9 +103,13 @@ void Game::update() {
     player.setSelectedSlot(inventory.getSelectedSlot());
 }
 
+
+
 void Game::render(sf::RenderWindow& window) {
     camera.apply(window);
     world.render(window);
     player.render(window);
-    inventory.render(window, player.getHotbar());
+    sf::Texture cropTexture;
+    cropTexture.loadFromFile("/home/kupalnic/CLionProjects/Farmer Life: Outside the town/cmake-build-debug/assets/textures/crop.png");
+    inventory.render(window, player.getHotbar(), cropTexture);
 }

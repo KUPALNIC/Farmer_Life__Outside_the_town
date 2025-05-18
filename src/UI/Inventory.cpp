@@ -63,7 +63,7 @@ void Inventory::renderCrops(sf::RenderWindow& window, sf::Texture& cropTexture) 
         static sf::Font font;
         static bool isFontLoaded = false;
         if (!isFontLoaded) {
-            font.openFromFile("assets/fonts/Delius/Delius-Regular.ttf");
+            font.openFromFile("../assets/fonts/Delius/Delius-Regular.ttf");
             isFontLoaded = true;
         }
         sf::Text txt(font, std::to_string(count), 15);
@@ -135,12 +135,12 @@ int Inventory::getSelectedSlot() const {
     return selectedSlot;
 }
 
-CropType getCropInSlot(int slot) {
-    switch (slot) {
-        case 3: return CropType::Wheat;
-        case 4: return CropType::Carrot;
-        case 5: return CropType::Potato;
-        case 6: return CropType::Tomato;
-        default: return CropType::None;
-    }
-}
+// CropType getCropInSlot(int slot) {
+//     switch (slot) {
+//         case 3: return CropType::Wheat;
+//         case 4: return CropType::Carrot;
+//         case 5: return CropType::Potato;
+//         case 6: return CropType::Tomato;
+//         default: return CropType::None;
+//     }
+// }
