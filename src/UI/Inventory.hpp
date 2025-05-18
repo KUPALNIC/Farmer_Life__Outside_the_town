@@ -15,11 +15,19 @@ public:
     void updatePosition(const sf::Vector2u& windowSize);
     int getSelectedSlot() const;
     CropType getCropInSlot(int slot) const;
+
+    void renderCoins(sf::RenderWindow &window, sf::Texture &coinTexture);
+
     // Работа с культурами
     void addCrop(CropType type, int amount = 1);
     bool removeCrop(CropType type, int amount = 1);
     int getCropCount(CropType type) const;
     std::map<CropType, int> getAllCrops() const;
+
+    int getCoins() const { return coins; }
+    void addCoins(int amount) { coins += amount; if (coins < 0) coins = 0; }
+    bool spendCoins(int amount) { if (coins >= amount) { coins -= amount; return true; } return false; }
+    void setCoins(int amount) { coins = amount; }
 
 
 private:
@@ -35,4 +43,6 @@ private:
 
     // Приватный метод для рендера культур
     void renderCrops(sf::RenderWindow& window, sf::Texture& cropTexture);
+
+    int coins = 10; // Начальное количество монет
 };

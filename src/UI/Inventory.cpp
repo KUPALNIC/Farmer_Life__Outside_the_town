@@ -13,9 +13,6 @@ Inventory::Inventory(int slots, float slotSize, const sf::Vector2f& position)
         this->slots.push_back(slot);
     }
     addCrop(CropType::Wheat, 1);
-    addCrop(CropType::Carrot, 1);
-    addCrop(CropType::Potato, 1);
-    addCrop(CropType::Tomato, 1);
 }
 void Inventory::addCrop(CropType type, int amount) {
     if (type != CropType::None) {
@@ -147,4 +144,33 @@ CropType Inventory::getCropInSlot(int slot) const {
         return cropOrder[cropIndex];
     }
     return CropType::None;
+}
+
+void Inventory::renderCoins(sf::RenderWindow& window, sf::Texture& coinTexture) {
+    sf::View original = window.getView();
+    window.setView(window.getDefaultView());
+
+    float x = window.getSize().x - 80.f;
+    float y = 20.f;
+
+    sf::Sprite coinSprite(coinTexture);
+    coinSprite.setScale({2.f, 2.f});
+    coinSprite.setPosition({x, y});
+
+    window.draw(coinSprite);
+
+    static sf::Font font;
+    static bool fontLoaded = false;
+    if (!fontLoaded) {
+        font.openFromFile("../assets/fonts/Delius/Delius-Regular.ttf");
+        fontLoaded = true;
+    }
+    sf::Text coinText(font, std::to_string(coins), 22);
+    coinText.setFillColor(sf::Color::White);
+    coinText.setOutlineColor(sf::Color::Black);
+    coinText.setOutlineThickness(2.f);
+    coinText.setPosition({x + 28.f, y - 2.f});
+    window.draw(coinText);
+
+    window.setView(original);
 }

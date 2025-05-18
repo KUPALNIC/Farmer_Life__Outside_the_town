@@ -109,6 +109,18 @@ build CMakeFiles/Farmer_Life__Outside_the_town.dir/src/UI/Inventory.cpp.o: CXX_C
   OBJECT_DIR = CMakeFiles/Farmer_Life__Outside_the_town.dir
   OBJECT_FILE_DIR = CMakeFiles/Farmer_Life__Outside_the_town.dir/src/UI
 
+build CMakeFiles/Farmer_Life__Outside_the_town.dir/src/Game/Trader.cpp.o: CXX_COMPILER__Farmer_Life__Outside_the_town_unscanned_Debug /home/kupalnic/CLionProjects/Farmer$ Life$:$ Outside$ the$ town/src/Game/Trader.cpp || cmake_object_order_depends_target_Farmer_Life__Outside_the_town
+  DEP_FILE = CMakeFiles/Farmer_Life__Outside_the_town.dir/src/Game/Trader.cpp.o.d
+  FLAGS = -g -fdiagnostics-color=always
+  OBJECT_DIR = CMakeFiles/Farmer_Life__Outside_the_town.dir
+  OBJECT_FILE_DIR = CMakeFiles/Farmer_Life__Outside_the_town.dir/src/Game
+
+build CMakeFiles/Farmer_Life__Outside_the_town.dir/src/Game/TradeWindow.cpp.o: CXX_COMPILER__Farmer_Life__Outside_the_town_unscanned_Debug /home/kupalnic/CLionProjects/Farmer$ Life$:$ Outside$ the$ town/src/Game/TradeWindow.cpp || cmake_object_order_depends_target_Farmer_Life__Outside_the_town
+  DEP_FILE = CMakeFiles/Farmer_Life__Outside_the_town.dir/src/Game/TradeWindow.cpp.o.d
+  FLAGS = -g -fdiagnostics-color=always
+  OBJECT_DIR = CMakeFiles/Farmer_Life__Outside_the_town.dir
+  OBJECT_FILE_DIR = CMakeFiles/Farmer_Life__Outside_the_town.dir/src/Game
+
 
 # =============================================================================
 # Link build statements for EXECUTABLE target Farmer_Life__Outside_the_town
@@ -117,7 +129,7 @@ build CMakeFiles/Farmer_Life__Outside_the_town.dir/src/UI/Inventory.cpp.o: CXX_C
 #############################################
 # Link the executable Farmer_Life__Outside_the_town
 
-build Farmer_Life__Outside_the_town: CXX_EXECUTABLE_LINKER__Farmer_Life__Outside_the_town_Debug CMakeFiles/Farmer_Life__Outside_the_town.dir/src/main.cpp.o CMakeFiles/Farmer_Life__Outside_the_town.dir/src/Game/Game.cpp.o CMakeFiles/Farmer_Life__Outside_the_town.dir/src/Game/Player.cpp.o CMakeFiles/Farmer_Life__Outside_the_town.dir/src/Game/Camera.cpp.o CMakeFiles/Farmer_Life__Outside_the_town.dir/src/Game/World.cpp.o CMakeFiles/Farmer_Life__Outside_the_town.dir/src/Objects/Crop.cpp.o CMakeFiles/Farmer_Life__Outside_the_town.dir/src/Objects/Bed.cpp.o CMakeFiles/Farmer_Life__Outside_the_town.dir/src/Objects/Tree.cpp.o CMakeFiles/Farmer_Life__Outside_the_town.dir/src/Objects/Tool.cpp.o CMakeFiles/Farmer_Life__Outside_the_town.dir/src/UI/Inventory.cpp.o
+build Farmer_Life__Outside_the_town: CXX_EXECUTABLE_LINKER__Farmer_Life__Outside_the_town_Debug CMakeFiles/Farmer_Life__Outside_the_town.dir/src/main.cpp.o CMakeFiles/Farmer_Life__Outside_the_town.dir/src/Game/Game.cpp.o CMakeFiles/Farmer_Life__Outside_the_town.dir/src/Game/Player.cpp.o CMakeFiles/Farmer_Life__Outside_the_town.dir/src/Game/Camera.cpp.o CMakeFiles/Farmer_Life__Outside_the_town.dir/src/Game/World.cpp.o CMakeFiles/Farmer_Life__Outside_the_town.dir/src/Objects/Crop.cpp.o CMakeFiles/Farmer_Life__Outside_the_town.dir/src/Objects/Bed.cpp.o CMakeFiles/Farmer_Life__Outside_the_town.dir/src/Objects/Tree.cpp.o CMakeFiles/Farmer_Life__Outside_the_town.dir/src/Objects/Tool.cpp.o CMakeFiles/Farmer_Life__Outside_the_town.dir/src/UI/Inventory.cpp.o CMakeFiles/Farmer_Life__Outside_the_town.dir/src/Game/Trader.cpp.o CMakeFiles/Farmer_Life__Outside_the_town.dir/src/Game/TradeWindow.cpp.o
   FLAGS = -g
   LINK_LIBRARIES = -lsfml-graphics  -lsfml-window  -lsfml-system
   OBJECT_DIR = CMakeFiles/Farmer_Life__Outside_the_town.dir

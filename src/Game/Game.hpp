@@ -6,6 +6,8 @@
 #include "World.hpp"
 #include "/home/kupalnic/CLionProjects/Farmer Life: Outside the town/src/UI/Inventory.hpp"
 #include <SFML/System/Clock.hpp>
+#include "Trader.hpp"
+#include "TradeWindow.hpp"
 
 class Game {
 public:
@@ -14,6 +16,7 @@ public:
     void handleInput(const sf::Event& event, const sf::RenderWindow& window);
     void update();
     void render(sf::RenderWindow& window);
+    void notifyUser(const std::string& text);
 
 private:
     Player player;
@@ -24,4 +27,11 @@ private:
     bool isRemoving = false;           // флаг: сейчас держим ПКМ
     sf::Clock removeClock;             // часы для замера длительности удержания
     int removeGridX = -1, removeGridY = -1; // координаты ячейки, на которой началось удержание
+    Trader trader;
+    TradeWindow tradeWindow;
+    sf::Texture traderTexture;
+    sf::Texture coinTexture;
+    sf::Texture cropTexture;
+    std::string notificationText;
+    sf::Clock notificationClock;
 };

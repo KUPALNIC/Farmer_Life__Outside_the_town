@@ -1,11 +1,18 @@
 #include "Game.hpp"
 #include <iostream>
 
+constexpr int BED_COST = 10;
+
 Game::Game(): player(world),
-      inventory(9, 64.f, {650,1000}){
+      inventory(9, 64.f, {650,1000}), trader({80.f, 80.f}){
     if (!font.openFromFile("../assets/fonts/Delius/Delius-Regular.ttf")) {
         std::cerr << "Ошибка загрузки шрифта!" << std::endl;
     }
+    font.openFromFile("../assets/fonts/Delius/Delius-Regular.ttf");
+    traderTexture.loadFromFile("../assets/textures/trader.png");
+    coinTexture.loadFromFile("../assets/textures/coin.png");
+    cropTexture.loadFromFile("../assets/textures/crop.png");
+    tradeWindow.setNotifyCallback([this](const std::string& msg) { notifyUser(msg); });
 }
 
 Game::~Game() {}
@@ -13,6 +20,20 @@ Game::~Game() {}
 void Game::handleInput(const sf::Event& event, const sf::RenderWindow& window) {
     camera.handleInput(event);
     inventory.handleInput(event);
+    // Проверка открытия окна торговли
+    if (event.is<sf::Event::KeyPressed>()) {
+        auto key = event.getIf<sf::Event::KeyPressed>();
+        if (key->code == sf::Keyboard::Key::E) {
+            // Проверка дистанции до торговца
+            sf::Vector2f p = player.getPosition();
+            sf::Vector2f t = trader.getPosition();
+            float dist = std::hypot(p.x-t.x, p.y-t.y);
+            if (dist < 90.f && !tradeWindow.isOpen()) {
+                tradeWindow.open();
+            }
+        }
+    }
+    tradeWindow.handleInput(event, inventory);
 
     if (event.is<sf::Event::MouseButtonPressed>()) {
         auto mouseEvent = event.getIf<sf::Event::MouseButtonPressed>();
@@ -48,8 +69,14 @@ void Game::handleInput(const sf::Event& event, const sf::RenderWindow& window) {
                 // Мотыга — создаём грядку
                 if (tt == Tool::Type::Hoe) {
                     if (world.getCellType(gridX, gridY) == CellType::EMPTY)
-                        world.interactWithCell(gridX, gridY, CellType::BED);
-                        world.createBed(gridX, gridY);
+                        if (inventory.getCoins() >= BED_COST) {
+                            inventory.spendCoins(BED_COST);
+                            world.interactWithCell(gridX, gridY, CellType::BED);
+                            world.createBed(gridX, gridY);
+                        } else {
+                            notificationText = "Not enough coins";
+                            notificationClock.restart();
+                        }
                     return;
                 }
                 // Лейка — поливаем грядку
@@ -111,6 +138,7 @@ void Game::render(sf::RenderWindow& window) {
     camera.apply(window);
     world.render(window);
     world.renderBeds(window, cropTexture);
+    trader.render(window, traderTexture);
     player.render(window);
     if (!cropTexture.loadFromFile("../assets/textures/crop.png")) {
         std::cerr << "Failed to load crop.png!" << std::endl;
@@ -118,4 +146,32 @@ void Game::render(sf::RenderWindow& window) {
     cropTexture.loadFromFile("../assets/textures/crop.png");
     inventory.render(window, player.getHotbar(), cropTexture);
 
+
+    // HUD: монеты и инвентарь всегда поверх
+    inventory.renderCoins(window, coinTexture);
+    if (!notificationText.empty() && notificationClock.getElapsedTime().asSeconds() < 2.0f) {
+        sf::View original = window.getView();
+        window.setView(window.getDefaultView());
+        sf::Text notif(font, notificationText, 20);
+        notif.setFillColor(sf::Color::Red);
+        notif.setOutlineColor(sf::Color::Black);
+        notif.setOutlineThickness(2.f);
+        // notif.setScale({3.f, 3.f});
+        notif.setPosition({window.getSize().x - 200.f, 50.f});
+        window.draw(notif);
+        window.setView(original);
+    } else if (notificationClock.getElapsedTime().asSeconds() >= 2.0f) {
+        notificationText.clear();
+    }
+    inventory.render(window, player.getHotbar(), cropTexture);
+
+    // Окно торговли поверх всего
+    tradeWindow.render(window, inventory, cropTexture, font);
+
+}
+
+
+void Game::notifyUser(const std::string& text) {
+    notificationText = text;
+    notificationClock.restart();
 }
