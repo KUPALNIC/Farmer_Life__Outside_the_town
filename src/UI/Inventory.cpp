@@ -28,7 +28,6 @@ bool Inventory::removeCrop(CropType type, int amount) {
     if (cropItems[type] >= amount) {
         cropItems[type] -= amount;
         if (cropItems[type] == 0) {
-            // удалить из cropOrder
             cropOrder.erase(std::remove(cropOrder.begin(), cropOrder.end(), type), cropOrder.end());
         }
         return true;
@@ -95,12 +94,9 @@ void Inventory::handleInput(const sf::Event& event) {
 }
 
 void Inventory::updatePosition(const sf::Vector2u& windowSize) {
-    // Центрируем инвентарь по горизонтали и фиксируем его снизу
-    float inventoryWidth = totalSlots * (slotSize + 5.0f) - 5.0f; // Общая ширина инвентаря
-    float xPosition = (windowSize.x - inventoryWidth) / 2.0f; // Центрирование по горизонтали
-    float yPosition = windowSize.y - slotSize - 20.0f;       // Отступ от нижнего края
-
-    // Обновляем позиции слотов в соответствии с новыми координатами
+    float inventoryWidth = totalSlots * (slotSize + 5.0f) - 5.0f;
+    float xPosition = (windowSize.x - inventoryWidth) / 2.0f;
+    float yPosition = windowSize.y - slotSize - 20.0f;
     for (int i = 0; i < totalSlots; ++i) {
         slots[i].setPosition({xPosition + i * (slotSize + 5.0f), yPosition});
     }

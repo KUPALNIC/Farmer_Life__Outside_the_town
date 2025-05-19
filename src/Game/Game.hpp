@@ -30,9 +30,9 @@ private:
     std::optional<Camera> camera;
     Inventory inventory;
     sf::Font font;
-    bool isRemoving = false;           // флаг: сейчас держим ПКМ
-    sf::Clock removeClock;             // часы для замера длительности удержания
-    int removeGridX = -1, removeGridY = -1; // координаты ячейки, на которой началось удержание
+    bool isRemoving = false;
+    sf::Clock removeClock;
+    int removeGridX = -1, removeGridY = -1;
     Trader trader;
     TradeWindow tradeWindow;
     sf::Texture traderTexture;

@@ -13,7 +13,7 @@ void TradeWindow::handleInput(const sf::Event& event, Inventory& inventory) {
     if (!openFlag) return;
     if (event.is<sf::Event::KeyPressed>()) {
         auto key = event.getIf<sf::Event::KeyPressed>();
-        if (key->code == sf::Keyboard::Key::Escape) { close(); }
+        if (key->code == sf::Keyboard::Key::Q) { close(); }
         if (key->code == sf::Keyboard::Key::Up)    { if (selectedItem>0) --selectedItem; }
         if (key->code == sf::Keyboard::Key::Down)  { if (selectedItem<3) ++selectedItem; }
         if (key->code == sf::Keyboard::Key::Tab)   { mode = (mode == Buy) ? Sell : Buy; }
@@ -86,7 +86,7 @@ void TradeWindow::render(sf::RenderWindow& window, Inventory& inventory, sf::Tex
 
     sf::Text hint(font);
     hint.setFont(font);
-    hint.setString("[Enter] Buy/Sell, [Tab] Mode, [Esc] Exit");
+    hint.setString("[Enter] Buy/Sell, [Tab] Mode, [Q] Exit");
     hint.setCharacterSize(16);
     hint.setFillColor(sf::Color::Cyan);
     hint.setPosition({static_cast<float>(window.getSize().x/2-150), static_cast<float>(window.getSize().y/2+90)});

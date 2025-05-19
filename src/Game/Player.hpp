@@ -6,7 +6,7 @@
 
 class Player {
 public:
-    Player(World& worldRef);
+    explicit Player(World& worldRef);
 
     // void handleInput(sf::Event& event);
     void update(float deltaTime);

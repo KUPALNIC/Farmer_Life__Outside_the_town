@@ -23,11 +23,9 @@ Player::Player(World& worldRef) : world(worldRef),
 }
 
 void Player::update(float deltaTime) {
-    const float speed = 300.0f;
+    const float speed = 100.0f;
     sf::Vector2f movement(0.0f, 0.0f);
     bool isMoving = false;
-
-    // Handle movement and animation
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W)) {
         movement.y -= speed * deltaTime;
         PlayerSprite.setTexture(backwardTexture);
@@ -65,15 +63,10 @@ void Player::update(float deltaTime) {
         facingLeft = false;
         isMoving = true;
     }
-
-    // Update position
     sf::Vector2f newPosition = position + movement;
     PlayerSprite.setPosition(newPosition);
-    // Ограничение по границе карты:
     newPosition.x = std::max(0.f, std::min(newPosition.x, this->world.worldSize * this->world.cellSize - 1.f));
     newPosition.y = std::max(0.f, std::min(newPosition.y, this->world.worldSize * this->world.cellSize - 1.f));
-
-    // Ограничение по открытому биому:
     Biome newBiome = this->world.getBiomeAt(newPosition.x, newPosition.y);
     int gridX = int(newPosition.x) / this->world.cellSize;
     int gridY = int(newPosition.y) / this->world.cellSize;
@@ -81,8 +74,6 @@ void Player::update(float deltaTime) {
         position = newPosition;
         PlayerSprite.setPosition(position);
     }
-    // иначе — стоим на месте
-    // If not moving, reset to idle frame
     if (!isMoving) {
         currentFrame = 0;
         PlayerSprite.setTextureRect(sf::IntRect({0, 0}, {32, 32}));
@@ -101,8 +92,8 @@ void Player::render(sf::RenderWindow& window) {
     window.draw(PlayerSprite);
     Tool* tool = hotbar[selectedSlot];
     if (tool && tool->getType() != Tool::Type::None) {
-        sf::Vector2f toolPos = position + sf::Vector2f(0, 0); // смещение подбери по вкусу
-        tool->render(window, toolPos, 1.5f); // инструменты мельче персонажа
+        sf::Vector2f toolPos = position + sf::Vector2f(0, 0);
+        tool->render(window, toolPos, 1.5f);
     }
 }
 

@@ -11,11 +11,11 @@ MainMenu::MainMenu(const sf::Font& font, const sf::Texture& bgTexture, sf::Rende
     );
     title.setFont(font);
     title.setString("Farmer Life: Outside the Town");
-    title.setCharacterSize(44);
+    title.setCharacterSize(100);
     title.setFillColor(sf::Color::White);
     title.setOutlineColor(sf::Color(80, 60, 30));
     title.setOutlineThickness(4.f);
-    title.setPosition({window.getSize().x / 2.f - title.getLocalBounds().size.x, 80});
+    title.setPosition({window.getSize().x / 2.f - title.getLocalBounds().size.x / 2.f, 80});
     menu.setPosition(window.getSize().x / 2.f - 160, 250);
 }
 

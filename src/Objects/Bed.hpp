@@ -28,6 +28,6 @@ private:
     CropType crop = CropType::None;
     int growthStage = 0;
     float growthTimer = 0.0f;
-    static constexpr float stageTime = 5.0f;
+    static constexpr float stageTime = 20.0f;
     static constexpr int maxGrowthStage = 5;
 };

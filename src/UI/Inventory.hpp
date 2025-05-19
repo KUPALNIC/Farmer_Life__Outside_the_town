@@ -39,9 +39,7 @@ private:
 
     // Культуры
     std::map<CropType, int> cropItems;
-    std::vector<CropType> cropOrder; // порядок появления культур
-
-    // Приватный метод для рендера культур
+    std::vector<CropType> cropOrder;
     void renderCrops(sf::RenderWindow& window, sf::Texture& cropTexture);
 
     int coins = 10; // Начальное количество монет

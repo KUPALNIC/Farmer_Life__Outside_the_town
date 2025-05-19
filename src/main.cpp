@@ -64,14 +64,17 @@ int main() {
                     mainMenu.handleEvent(event, window);
                 } else if (state == GameState::Playing) {
                 auto keyEvent = event.getIf<sf::Event::KeyPressed>();
-                int scancodeValue = static_cast<int>(keyEvent->scancode);
-                int escapeValue = static_cast<int>(sf::Keyboard::Scancode::Escape);
-                if (keyEvent &&  scancodeValue == escapeValue) {
-                    state = GameState::Paused;
-                    pauseMenu.show();
-                } else {
-                    game.handleInput(event, window);
-                }
+                    if (keyEvent) {
+                        int scancodeValue = static_cast<int>(keyEvent->scancode);
+                        int escapeValue = static_cast<int>(sf::Keyboard::Scancode::Escape);
+                        if (keyEvent &&  scancodeValue == escapeValue) {
+                            state = GameState::Paused;
+                            pauseMenu.show();
+                        }
+                    }
+                    else {
+                        game.handleInput(event, window);
+                    }
                 } else if (state == GameState::Paused) {
                     pauseMenu.handleEvent(event, window);
                 }
@@ -79,7 +82,7 @@ int main() {
 
         }
 
-        game.update();
+        // game.update();
         window.clear();
         if (state == GameState::MainMenu) {
             mainMenu.render(window);

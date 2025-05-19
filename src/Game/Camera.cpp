@@ -32,7 +32,7 @@ void Camera::update(float deltaTime, const sf::Vector2f& targetPosition) {
         view.setSize({800 * zoomLevel, 600 * zoomLevel});
     }
 
-    // Центрируем камеру на позиции цели (например, игрока)
+    // Центрируем камеру на позиции игрока
     view.setCenter(targetPosition);
 }
 

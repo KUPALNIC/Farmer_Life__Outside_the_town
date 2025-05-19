@@ -21,17 +21,13 @@ Game::Game()
 Game::~Game() {}
 
 void Game::reset() {
-    std::cout << "reset: start" << std::endl;
+    // std::cout << "reset: start" << std::endl;
     world.emplace();
-    std::cout << "reset: world ok" << std::endl;
+    // std::cout << "reset: world ok" << std::endl;
     player.emplace(*world);
-    std::cout << "reset: player ok" << std::endl;
+    // std::cout << "reset: player ok" << std::endl;
     camera.emplace();
-    std::cout << "reset: camera ok" << std::endl;
-
-    world.emplace();
-    player.emplace(*world);
-    camera.emplace();
+    // std::cout << "reset: camera ok" << std::endl;
     inventory = Inventory(9, 64.f, {650,1000});
     trader = Trader({80.f, 80.f});
     tradeWindow = TradeWindow();
@@ -70,21 +66,32 @@ void Game::handleInput(const sf::Event& event, const sf::RenderWindow& window) {
             }
         }
     }
-
     tradeWindow.handleInput(event, inventory);
 
     if (event.is<sf::Event::MouseButtonPressed>()) {
         auto mouseEvent = event.getIf<sf::Event::MouseButtonPressed>();
+        if (mouseEvent->button == sf::Mouse::Button::Right) {
+            sf::Vector2i pixelPos(mouseEvent->position.x, mouseEvent->position.y);
+            sf::Vector2f worldPos = window.mapPixelToCoords(pixelPos);
+            removeGridX = static_cast<int>(worldPos.x) / world->getCellSize();
+            removeGridY = static_cast<int>(worldPos.y) / world->getCellSize();
+            isRemoving = true;
+            removeClock.restart();
+            world->removeBed(removeGridX, removeGridY);
+
+        }
         if (mouseEvent->button == sf::Mouse::Button::Left) {
             sf::Vector2i pixelPos(mouseEvent->position.x, mouseEvent->position.y);
             sf::Vector2f worldPos = window.mapPixelToCoords(pixelPos);
             int gridX = static_cast<int>(worldPos.x) / world->getCellSize();
             int gridY = static_cast<int>(worldPos.y) / world->getCellSize();
+            if (!world->isBiomeOpened(gridX, gridY)) return;
             int selectedSlot = inventory.getSelectedSlot();
             if (selectedSlot >= 0 && selectedSlot <= 2) {
                 Tool* tool = player->getSelectedTool();
                 if (!tool) return;
                 Tool::Type tt = tool->getType();
+                //Hoe
                 if (tt == Tool::Type::Hoe) {
                     if (world->getCellType(gridX, gridY) == CellType::EMPTY) {
                         const int BED_COST = 10;
@@ -97,6 +104,39 @@ void Game::handleInput(const sf::Event& event, const sf::RenderWindow& window) {
                         }
                     }
                     return;
+                }
+                //Watering can
+                if (tt == Tool::Type::WateringCan) {
+                    if (world->getCellType(gridX, gridY) == CellType::BED)
+                        world->waterBed(gridX, gridY);
+                    return;
+                }
+                // Топор — сбор урожая
+                if (tt == Tool::Type::Axe) {
+                    if (world->getCellType(gridX, gridY) == CellType::BED) {
+                        Bed* bed = world->getBedAt(gridX, gridY);
+                        if (bed && bed->isReadyToHarvest()) {
+                            CropType harvested = bed->harvest();
+                            if (harvested != CropType::None) {
+                                inventory.addCrop(harvested, 2); // +2 культуры в инвентарь
+                            }
+                        }
+                    }
+                    world->dryBed(gridX, gridY);
+                    return;
+                }
+            }
+            if (selectedSlot >= 3 && selectedSlot <= 6) {
+                CropType selectedSeed = inventory.getCropInSlot(selectedSlot);
+                if (selectedSeed == CropType::None) return;
+                // Можно сажать только если ячейка — грядка, она политая и без культуры
+                if (world->getCellType(gridX, gridY) == CellType::BED) {
+                    Bed* bed = world->getBedAt(gridX, gridY);
+                    if (bed && !bed->isOccupied() && bed->isWatered()) {
+                        if (inventory.getCropCount(selectedSeed) > 0 && bed->plantCrop(selectedSeed)) {
+                            inventory.removeCrop(selectedSeed, 1);
+                        }
+                    }
                 }
             }
         }
@@ -151,7 +191,7 @@ void Game::render(sf::RenderWindow& window) {
         helloText.setFillColor(sf::Color::Yellow);
         helloText.setOutlineColor(sf::Color::Black);
         helloText.setOutlineThickness(2.f);
-        helloText.setPosition({t.x + 32 - helloText.getLocalBounds().size.x, t.y - 38});
+        helloText.setPosition({t.x + 32 - helloText.getLocalBounds().size.x / 2.f, t.y - 38});
         window.draw(helloText);
     }
     if (!showPhrase && !traderPhrase.empty()) {
