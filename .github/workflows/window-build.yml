@@ -19,7 +19,7 @@ jobs:
 
     - name: Install SFML
       run: |
-        choco install sfml --version=2.5.1 -y
+        choco install sfml --version=3.0.0 -y
 
     - name: Configure CMake
       run: cmake -B build -S . -DCMAKE_BUILD_TYPE=Release
@@ -34,7 +34,11 @@ jobs:
     - name: Prepare zip content
       run: |
         mkdir dist
-        copy build\Release\Farmer_Life__Outside_the_town.exe dist\
+        if exist build\Release\Farmer_Life__Outside_the_town.exe (
+          copy build\Release\Farmer_Life__Outside_the_town.exe dist\
+        ) else (
+          copy build\Farmer_Life__Outside_the_town.exe dist\
+        )
         copy build\Release\*.dll dist\
         if exist data xcopy data dist\data\ /E /I /Y
 
