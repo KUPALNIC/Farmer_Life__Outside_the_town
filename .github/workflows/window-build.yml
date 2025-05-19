@@ -1,0 +1,50 @@
+name: Build and Release Windows EXE
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup MSVC Developer Command Prompt
+      uses: ilammy/msvc-dev-cmd@v1
+
+    - name: Install SFML
+      run: |
+        choco install sfml --version=2.5.1 -y
+
+    - name: Configure CMake
+      run: cmake -B build -S . -DCMAKE_BUILD_TYPE=Release
+
+    - name: Build with CMake
+      run: cmake --build build --config Release
+
+    - name: Copy SFML DLLs
+      run: |
+        xcopy C:\tools\sfml\bin\*.dll build\Release\ /Y
+
+    - name: Prepare zip content
+      run: |
+        mkdir dist
+        copy build\Release\Farmer_Life__Outside_the_town.exe dist\
+        copy build\Release\*.dll dist\
+        if exist data xcopy data dist\data\ /E /I /Y
+
+    - name: Create zip archive
+      run: |
+        powershell Compress-Archive -Path dist\* -DestinationPath Farmer_Life_Windows.zip
+
+    - name: Upload Release Asset
+      uses: softprops/action-gh-release@v2
+      with:
+        files: Farmer_Life_Windows.zip
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
