@@ -14,32 +14,25 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v4
 
+    - name: Download SFML 3.0.0
+      run: |
+        curl -L -o sfml.zip https://www.sfml-dev.org/files/SFML-3.0.0-windows-vc17-64-bit.zip
+        7z x sfml.zip -osfml
+
     - name: Setup MSVC Developer Command Prompt
       uses: ilammy/msvc-dev-cmd@v1
 
-    - name: Install SFML
-      run: |
-        choco install sfml --version=3.0.0 -y
-
     - name: Configure CMake
-      run: cmake -B build -S . -DCMAKE_BUILD_TYPE=Release
+      run: cmake -B build -S . -DCMAKE_BUILD_TYPE=Release -DSFML_DIR="${{ github.workspace }}/sfml/SFML-3.0.0/lib/cmake/SFML"
 
     - name: Build with CMake
       run: cmake --build build --config Release
 
-    - name: Copy SFML DLLs
-      run: |
-        xcopy C:\tools\sfml\bin\*.dll build\Release\ /Y
-
     - name: Prepare zip content
       run: |
         mkdir dist
-        if exist build\Release\Farmer_Life__Outside_the_town.exe (
-          copy build\Release\Farmer_Life__Outside_the_town.exe dist\
-        ) else (
-          copy build\Farmer_Life__Outside_the_town.exe dist\
-        )
-        copy build\Release\*.dll dist\
+        copy build\Release\Farmer_Life__Outside_the_town.exe dist\
+        copy sfml\SFML-3.0.0\bin\*.dll dist\
         if exist data xcopy data dist\data\ /E /I /Y
 
     - name: Create zip archive
